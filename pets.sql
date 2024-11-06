@@ -106,7 +106,6 @@ create table Pet2 (
 	age				integer,
 	dietaryRequirements		varchar (30),
 	primary key (species, age)
-	--FOREIGN KEY (DietaryRequirements) REFERENCES Pet11
 );
 grant select on Pet2 to public;
 
@@ -114,7 +113,6 @@ create table Pet3 (
 	pid	integer	primary key,
 	age	integer,
 	foreign key (pid) references Pet1
-	--FOREIGN KEY (Age) REFERENCES Pet2
 );
 grant select on Pet3 to public;
 
@@ -143,7 +141,6 @@ create table Pet7 (
 	pid			integer	primary key,
 	species		varchar (30),
 	foreign key (pid) references Pet1
-	--FOREIGN KEY (Species) REFERENCES Pet2
 );
 grant select on Pet7 to public;
 
@@ -152,7 +149,6 @@ create table Pet8 (
 	breed				varchar (30),
 	lifespan			integer,
 	primary key (species, breed)
-	--FOREIGN KEY (Species) REFERENCES Pet2
 );
 grant select on Pet8 to public;
 
@@ -160,7 +156,6 @@ create table Pet9 (
 	pid			integer	primary key,
 	breed			varchar (30),
 	foreign key (pid) references Pet1
-	--FOREIGN KEY (age) REFERENCES Pet8
 );
 grant select on Pet9 to public;
 
@@ -178,7 +173,6 @@ create table Pet11 (
 	healthCondition			varchar (30),
 	carePlan 				varchar(30),
 	primary key (species, dietaryRequirements, healthCondition)
-	--FOREIGN KEY (Species) REFERENCES Pet2
 );
 grant select on Pet11 to public;
 
