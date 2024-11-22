@@ -69,9 +69,9 @@ router.post("/initiate-demotable", async (req, res) => {
     }
 });
 
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
+router.post("/insert-doctable", async (req, res) => {
+    const { pid, vetcon, id, ddesc, ddate } = req.body;
+    const insertResult = await appService.insertDoctable(pid, vetcon, id, ddesc, ddate);
     if (insertResult) {
         res.json({ success: true });
     } else {
