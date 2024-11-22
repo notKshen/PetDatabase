@@ -254,20 +254,26 @@ async function resetDemotable() {
 }
 
 // Inserts new records into the demotable.
-async function insertDemotable(event) {
+async function insertDoctable(event) {
     event.preventDefault();
 
+    const pidValue = document.getElementById('insertPID').value;
+    const vetConValue = document.getElementById('insertVetCon').value;
     const idValue = document.getElementById('insertId').value;
-    const nameValue = document.getElementById('insertName').value;
+    const descValue = document.getElementById('insertDesc').value;
+    const dateValue = document.getElementById('insertDate').value;
 
-    const response = await fetch('/insert-demotable', {
+    const response = await fetch('/insert-doctable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+            pid: pidValue,
+            vetcon: vetConValue,
             id: idValue,
-            name: nameValue
+            ddesc: descValue,
+            ddate: dateValue
         })
     });
 
@@ -281,6 +287,34 @@ async function insertDemotable(event) {
         messageElement.textContent = "Error inserting data!";
     }
 }
+
+// async function insertDemotable(event) {
+//     event.preventDefault();
+
+//     const idValue = document.getElementById('insertId').value;
+//     const nameValue = document.getElementById('insertName').value;
+
+//     const response = await fetch('/insert-demotable', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             id: idValue,
+//             name: nameValue
+//         })
+//     });
+
+//     const responseData = await response.json();
+//     const messageElement = document.getElementById('insertResultMsg');
+
+//     if (responseData.success) {
+//         messageElement.textContent = "Data inserted successfully!";
+//         fetchTableData();
+//     } else {
+//         messageElement.textContent = "Error inserting data!";
+//     }
+// }
 
 // Updates names in the demotable.
 async function updateNameDemotable(event) {
@@ -336,8 +370,8 @@ async function countDemotable() {
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
-    document.getElementById("resetPetTable").addEventListener("click", resetDemotable);
-    document.getElementById("insertPetTable").addEventListener("submit", insertDemotable);
+    // document.getElementById("resetPetTable").addEventListener("click", resetDemotable);
+    document.getElementById("insertDocTable").addEventListener("submit", insertDoctable);
     document.getElementById("updateNamePetTable").addEventListener("submit", updateNameDemotable);
     document.getElementById("countPetTable").addEventListener("click", countDemotable);
 };
