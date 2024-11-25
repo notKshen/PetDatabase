@@ -76,7 +76,9 @@ async function testOracleConnection() {
     });
 }
 
-async function fetchDemotableFromDb() {
+// fetches data from relations in database
+
+async function fetchPettableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Pet1');
         return result.rows;
@@ -84,6 +86,72 @@ async function fetchDemotableFromDb() {
         return [];
     });
 }
+
+async function fetchDoctableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Documentation');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchVettableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Veterinarian');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchOwnertableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM POwner');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchApplicationtableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM AdoptionApplication');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchSheltertableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Shelter');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchPurchasesFromtableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM PurchasesFrom');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchDogtableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Dog');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+
+////
 
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
@@ -144,7 +212,14 @@ async function countDemotable() {
 
 module.exports = {
     testOracleConnection,
-    fetchDemotableFromDb,
+    fetchPettableFromDb,
+    fetchDoctableFromDb,
+    fetchVettableFromDb,
+    fetchOwnertableFromDb,
+    fetchApplicationtableFromDb,
+    fetchSheltertableFromDb,
+    fetchPurchasesFromtableFromDb,
+    fetchDogtableFromDb,
     initiateDemotable, 
     insertDemotable, 
     updateNameDemotable, 
