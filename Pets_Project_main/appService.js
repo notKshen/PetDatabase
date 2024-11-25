@@ -80,7 +80,35 @@ async function testOracleConnection() {
 
 async function fetchPettableFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Pet1');
+        const result = await connection.execute(
+            `SELECT 
+            p1.pid,
+            p1.pname,
+            p7.species,
+            p3.age,
+            p4.healthCondition,
+            p5.adoptionDate,
+            p6.arriveDate,
+            p9.breed,
+            p10.ownerAddress
+        FROM 
+            Pet1 p1,
+            Pet3 p3,
+            Pet4 p4,
+            Pet5 p5,
+            Pet6 p6,
+            Pet7 p7,
+            Pet9 p9,
+            Pet10 p10
+        WHERE 
+            p1.pid = p3.pid
+            AND p1.pid = p4.pid
+            AND p1.pid = p5.pid
+            AND p1.pid = p6.pid
+            AND p1.pid = p7.pid
+            AND p1.pid = p9.pid
+            AND p1.pid = p10.pid
+            `);
         return result.rows;
     }).catch(() => {
         return [];
@@ -153,25 +181,6 @@ async function fetchDogtableFromDb() {
 
 ////
 
-async function initiateDemotable() {
-    return await withOracleDB(async (connection) => {
-        try {
-            await connection.execute(`DROP TABLE Pet1 cascade constraints`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
-
-        const result = await connection.execute(`
-            create table Pet1 (
-                pid 		integer	primary key,
-                pname		varchar (12)
-            )
-        `);
-        return true;
-    }).catch(() => {
-        return false;
-    });
-}
 
 async function insertDemotable(id, name) {
     return await withOracleDB(async (connection) => {
@@ -187,19 +196,92 @@ async function insertDemotable(id, name) {
     });
 }
 
-async function updateNameDemotable(oldName, newName) {
+async function updateDemotable(field, oldValue, newValue, petID) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `UPDATE Pet1 SET pname=:newName where pname=:oldName`,
-            [newName, oldName],
+      let result;
+  
+      switch (field) {
+        case "name":
+          result = await connection.execute(
+            `UPDATE Pet1 SET pname = :newValue WHERE pname = :oldValue AND pid = :petID`,
+            [newValue, oldValue, petID],
             { autoCommit: true }
-        );
+          );
+          break;
+  
+        case "age":
+          result = await connection.execute(
+            `UPDATE Pet3 SET age = :newValue WHERE age = :oldValue AND pid = :petID`,
+            [Number(newValue), Number(oldValue), petID],
+            { autoCommit: true }
+          );
+          break;
+  
+        case "healthCondition":
+          result = await connection.execute(
+            `UPDATE Pet4 SET healthCondition = :newValue WHERE healthCondition = :oldValue AND pid = :petID`,
+            [newValue, oldValue, petID],
+            { autoCommit: true }
+          );
+          break;
+  
+          case "adoptionDate": 
 
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
+          let formattedOldDate;
+          let formattedNewDate;
+
+            if(oldValue != '') {
+                formattedOldDate = new Date(oldValue).toISOString().split('T')[0];
+            }
+            if(newValue != '') {
+                formattedNewDate = new Date(newValue).toISOString().split('T')[0]; 
+            }
+            
+            if(oldValue == '') {
+                result = await connection.execute(
+                    `UPDATE Pet5 SET adoptionDate = TO_DATE(:newValue, 'YYYY-MM-DD') WHERE pid = :petID`,
+                    [formattedNewDate, petID],  
+                    { autoCommit: true }  
+                );
+            }
+            else if (newValue == '') {
+                result = await connection.execute(
+                    `UPDATE Pet5 SET adoptionDate = NULL WHERE adoptionDate = TO_DATE(:oldValue, 'YYYY-MM-DD') AND pid = :petID`,
+                    [formattedOldDate, petID],  
+                    { autoCommit: true }  
+                );
+            }
+            else {
+                result = await connection.execute(
+                    `UPDATE Pet5 SET adoptionDate = TO_DATE(:newValue, 'YYYY-MM-DD') WHERE adoptionDate = TO_DATE(:oldValue, 'YYYY-MM-DD') AND pid = :petID`,
+                    [formattedNewDate, formattedOldDate, petID],  
+                    { autoCommit: true }  
+                );
+            }
+
+            break;
+  
+        case "ownerAddress":
+            result = await connection.execute(
+                // Should be ON UPDATE CASCADE for foreign key
+                `UPDATE Pet10 SET ownerAddress = :newValue WHERE ownerAddress = :oldValue AND pid = :petID`,
+                [newValue, oldValue, petID],
+                { autoCommit: true }
+              );
+          break;
+  
+        default:
+          throw new Error(`Unknown field: ${field}`);
+      }
+  
+      // Return true if rows were updated
+      return result.rowsAffected && result.rowsAffected > 0;
+    }).catch((err) => {
+      console.error("Error during update:", err);
+      return false;
     });
-}
+  }
+  
 
 async function countDemotable() {
     return await withOracleDB(async (connection) => {
@@ -220,8 +302,7 @@ module.exports = {
     fetchSheltertableFromDb,
     fetchPurchasesFromtableFromDb,
     fetchDogtableFromDb,
-    initiateDemotable, 
     insertDemotable, 
-    updateNameDemotable, 
+    updateDemotable, 
     countDemotable
 };

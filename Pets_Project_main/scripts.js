@@ -296,22 +296,27 @@ async function updateDemotable(event) {
   const selectedField = document.getElementById("updateSelect").value;
   switch (selectedField) {
     case "age":
+        petID = document.getElementById("petIDAge").value;
         oldValue = document.getElementById("oldAgeValue").value;
         newValue = document.getElementById("newAgeValue").value;
         break;
     case "name":
+        petID = document.getElementById("petIDName").value;
         oldValue = document.getElementById("oldNameValue").value;
         newValue = document.getElementById("newNameValue").value;
         break;
     case "healthCondition":
+        petID = document.getElementById("petIDHC").value;
         oldValue = document.getElementById("oldHealthConditionValue").value;
         newValue = document.getElementById("newHealthConditionValue").value;
         break;
     case "adoptionDate":
+        petID = document.getElementById("petIDAD").value;
         oldValue = document.getElementById("oldAdoptionDateValue").value;
         newValue = document.getElementById("newAdoptionDateValue").value;
         break;
     case "ownerAddress":
+        petID = document.getElementById("petIDOA").value;
         oldValue = document.getElementById("oldOwnerAddressValue").value;
         newValue = document.getElementById("newOwnerAddressValue").value;
         break;
@@ -329,6 +334,7 @@ async function updateDemotable(event) {
       field: selectedField,
       oldValue,
       newValue,
+      petID,
     }),
   });
   fetchAndDisplayPets()

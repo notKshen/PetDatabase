@@ -72,8 +72,8 @@ router.post("/insert-demotable", async (req, res) => {
 });
 
 router.post("/update-demotable", async (req, res) => {
-    const { field, oldValue, newValue } = req.body;  
-    const updateResult = await appService.updateDemotable(field, oldValue, newValue);
+    const { field, oldValue, newValue, petID } = req.body;  
+    const updateResult = await appService.updateDemotable(field, oldValue, newValue, petID);
   
     if (updateResult) {
       res.json({ success: true });
