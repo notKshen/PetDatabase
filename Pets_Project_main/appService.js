@@ -250,6 +250,22 @@ async function countDemotable() {
     });
 }
 
+async function joinTable(query) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT * 
+            FROM POwner o, AdoptionApplication a 
+            WHERE o.oaddress = a.ownerAddress AND :query`,
+            [query],
+            { autoCommit: true }
+        );
+
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchPettableFromDb,
@@ -263,5 +279,6 @@ module.exports = {
     initiateDemotable, 
     insertDoctable, 
     updateNameDemotable, 
-    countDemotable
+    countDemotable,
+    joinTable
 };
