@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
+    <link rel="stylesheet" href="styles.css"> 
+
+    <title>Database Application</title>
+</head>
+<body>
+    <h1>Pet Shelter Database:  </h1>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <!-- Show 'PetTable'. 
+        Data will be fetched and inserted here dynamically using JavaScript. -->
+    <h2>Show PetTable</h2>
+    <table id="petTable" border="1 px">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Species</th>
+                <th>Age</th>
+                <th>Health Condition</th>
+                <th>Adoption Date</th>
+                <th>Arrive Date</th>
+                <th>Breed</th>
+                <th>Owner Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <!-- Show 'DocumentationTable'. 
+        Data will be fetched and inserted here dynamically using JavaScript. -->
+    <h2>Show DocumentationTable</h2>
+    <table id="docTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Pets Id</th>
+                <th>Veterinarian Contact</th>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Show VeterinarianTable</h2>
+    <table id="vetTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Experience</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Show OwnerTable</h2>
+    <table id="ownerTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Name</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Show AdoptionApplicationTable</h2>
+    <table id="applicationTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Shelter Address</th>
+                <th>Owner Address</th>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Approval Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Show ShelterTable</h2>
+    <table id="shelterTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Capacity</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Show PurchasesFromTable</h2>
+    <table id="purchasesFromTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Supplier Address</th>
+                <th>Shelter Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h2>Show DogTable</h2>
+    <table id="dogTable" border="1 px">
+        <thead>
+            <tr>
+                <th>PetId</th>
+                <th>Coat Type</th>
+                <th>Barking Frequency</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table> 
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Insert Values into PetTable </h2>
+    <form id="insertPetTable">
+        ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
+        Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
+
+        <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Update Information</h2>
+    <form id="updatePetTable">
+    <label for="updateSelect">What would you like to update?</label>
+    <select id="updateSelect" class="form-select" onchange="showUpdateFields()">
+        <option value="">Select an option</option>
+        <option value="name">Name</option>
+        <option value="age">Age</option>
+        <option value="healthCondition">Health Condition</option>
+        <option value="adoptionDate">Adoption Date</option>
+        <option value="ownerAddress">Owner Address</option>
+    </select>
+
+    <div id="nameDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDName" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old Name: <input type="text" id="oldNameValue" class="form-input" placeholder="Enter Old Name"> <br><br>
+        New Name: <input type="text" id="newNameValue" class="form-input" placeholder="Enter New Name" maxlength="20"> <br><br>
+    </div>
+
+    <div id="ageDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDAge" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old Age: <input type="number" id="oldAgeValue" class="form-input" placeholder="Enter Old Age"> <br><br>
+        New Age: <input type="number" id="newAgeValue" class="form-input" placeholder="Enter New Age"> <br><br>
+    </div>
+
+    <div id="healthConditionDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDHC" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old Health Condition: <input type="text" id="oldHealthConditionValue" class="form-input" placeholder="Enter Old Health Condition"> <br><br>
+        New Health Condition: <input type="text" id="newHealthConditionValue" class="form-input" placeholder="Enter New Health Condition"> <br><br>
+    </div>
+
+    <div id="adoptionDateDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDAD" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old Adoption Date: <input type="date" id="oldAdoptionDateValue" class="form-input"> <br><br>
+        New Adoption Date: <input type="date" id="newAdoptionDateValue" class="form-input"> <br><br>
+    </div>
+
+    <div id="ownerAddressDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDOA" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old Address: <input type="text" id="oldOwnerAddressValue" class="form-input" placeholder="Enter Old Address"> <br><br>
+        New Address: <input type="text" id="newOwnerAddressValue" class="form-input" placeholder="Enter New Address"> <br><br>
+    </div>
+
+    <button type="submit">Update</button>
+    </form>
+    <div id="updateResultMsg"></div>
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2>Count the Tuples in PetTable</h2>
+    <button id="countPetTable"> count </button> <br><br>
+    <!-- A placeholder to display the count result. -->
+    <div id="countResultMsg"></div> <br>
+
+    <!-- ===================================================================================== -->
+    <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
+    <script src="scripts.js"></script>
+</body>
+</html>
