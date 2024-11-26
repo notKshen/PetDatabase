@@ -237,43 +237,21 @@ async function fetchAndDisplayDogs() {
     });
 }
 
-// This function resets or initializes the demotable.
-async function resetDemotable() {
-    const response = await fetch("/initiate-demotable", {
-        method: 'POST'
-    });
-    const responseData = await response.json();
-
-    if (responseData.success) {
-        const messageElement = document.getElementById('resetResultMsg');
-        messageElement.textContent = "petTable initiated successfully!";
-        fetchTableData();
-    } else {
-        alert("Error initiating table!");
-    }
-}
-
 // Inserts new records into the demotable.
-async function insertDoctable(event) {
+async function insertDemotable(event) {
     event.preventDefault();
 
-    const pidValue = document.getElementById('insertPID').value;
-    const vetConValue = document.getElementById('insertVetCon').value;
     const idValue = document.getElementById('insertId').value;
-    const descValue = document.getElementById('insertDesc').value;
-    const dateValue = document.getElementById('insertDate').value;
+    const nameValue = document.getElementById('insertName').value;
 
-    const response = await fetch('/insert-doctable', {
+    const response = await fetch('/insert-demotable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            pid: pidValue,
-            vetcon: vetConValue,
             id: idValue,
-            ddesc: descValue,
-            ddate: dateValue
+            name: nameValue
         })
     });
 
@@ -288,33 +266,139 @@ async function insertDoctable(event) {
     }
 }
 
-// Updates names in the demotable.
-async function updateNameDemotable(event) {
-    event.preventDefault();
+// Toggle the visibility of the filter container
 
-    const oldNameValue = document.getElementById('updateOldName').value;
-    const newNameValue = document.getElementById('updateNewName').value;
+function toggleFilter() {
+    const filterContainer = document.getElementById('filterContainer');
+    filterContainer.style.display = filterContainer.style.display === 'none' ? 'block' : 'none';
+  }
 
-    const response = await fetch('/update-name-demotable', {
+async function applyFilter() {
+    const tableElement = document.getElementById('dogTable');
+    const tableBody = tableElement.querySelector('tbody');
+    const columns = ['pid', 'coatType', 'barkingFrequency'];
+    const selectedColumns = columns.filter((col) => document.getElementById(col).checked);
+
+    const response = await fetch('/filter-columns', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            oldName: oldNameValue,
-            newName: newNameValue
-        })
+        body: JSON.stringify({ columns: selectedColumns }),
     });
 
     const responseData = await response.json();
-    const messageElement = document.getElementById('updateNameResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Name updated successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error updating name!";
+    const dogTableContent = responseData.data;
+    // Always clear old, already fetched data before the new fetching process
+    if (tableBody) {
+        tableBody.innerHTML = '';
     }
+
+    // Dynamically create table headers
+    const tableHead = document.getElementById('dogTable').querySelector('thead');
+    if (tableHead) {
+        tableHead.innerHTML = ''; // Clear old headers
+        const headerRow = tableHead.insertRow();
+        selectedColumns.forEach((col) => {
+            const th = document.createElement('th');
+            th.textContent = col;
+            headerRow.appendChild(th);
+        });
+    }
+
+    dogTableContent.forEach(dog => {
+        const row = tableBody.insertRow();
+        dog.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+    document.getElementById('filterContainer').style.display = 'none';
+}
+
+
+
+  
+
+// Updates names in the demotable.
+
+function showUpdateFields() {
+    const selectValue = document.getElementById("updateSelect").value;
+
+    document.getElementById("nameDiv").classList.add("hidden");
+    document.getElementById("ageDiv").classList.add("hidden");
+    document.getElementById("healthConditionDiv").classList.add("hidden");
+    document.getElementById("adoptionDateDiv").classList.add("hidden");
+    document.getElementById("ownerAddressDiv").classList.add("hidden");
+
+    if (selectValue === "name") {
+        document.getElementById("nameDiv").classList.remove("hidden");
+    } else if (selectValue === "age") {
+        document.getElementById("ageDiv").classList.remove("hidden");
+    } else if (selectValue === "healthCondition") {
+        document.getElementById("healthConditionDiv").classList.remove("hidden");
+    } else if (selectValue === "adoptionDate") {
+        document.getElementById("adoptionDateDiv").classList.remove("hidden");
+    } else if (selectValue === "ownerAddress") {
+        document.getElementById("ownerAddressDiv").classList.remove("hidden");
+    }
+}
+
+// Update demotable
+async function updateDemotable(event) {
+  event.preventDefault();
+  const selectedField = document.getElementById("updateSelect").value;
+  switch (selectedField) {
+    case "age":
+        petID = document.getElementById("petIDAge").value;
+        oldValue = document.getElementById("oldAgeValue").value;
+        newValue = document.getElementById("newAgeValue").value;
+        break;
+    case "name":
+        petID = document.getElementById("petIDName").value;
+        oldValue = document.getElementById("oldNameValue").value;
+        newValue = document.getElementById("newNameValue").value;
+        break;
+    case "healthCondition":
+        petID = document.getElementById("petIDHC").value;
+        oldValue = document.getElementById("oldHealthConditionValue").value;
+        newValue = document.getElementById("newHealthConditionValue").value;
+        break;
+    case "adoptionDate":
+        petID = document.getElementById("petIDAD").value;
+        oldValue = document.getElementById("oldAdoptionDateValue").value;
+        newValue = document.getElementById("newAdoptionDateValue").value;
+        break;
+    case "ownerAddress":
+        petID = document.getElementById("petIDOA").value;
+        oldValue = document.getElementById("oldOwnerAddressValue").value;
+        newValue = document.getElementById("newOwnerAddressValue").value;
+        break;
+    default:
+        alert("Please select a valid field to update.");
+        return;
+}
+  const resultMsg = document.getElementById("updateResultMsg");
+  const response = await fetch(`/update-demotable`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      field: selectedField,
+      oldValue,
+      newValue,
+      petID,
+    }),
+  });
+  fetchAndDisplayPets()
+  const responseData = await response.json();
+
+  if (responseData.success) {
+    resultMsg.textContent = `${selectedField} updated successfully!`;
+  } else {
+    resultMsg.textContent = `Error updating ${selectedField}!`;
+  }
 }
 
 // Counts rows in the demotable.
@@ -335,100 +419,6 @@ async function countDemotable() {
     }
 }
 
-async function joinTableAddQuery() {
-    const querySetDiv = document.getElementById('querySet');
-    const newQueryDiv = document.createElement('div');
-    newQueryDiv.classList.add('query');
-
-    const andOr = document.createElement('select');
-    andOr.classList.add('andOr');
-    andOr.innerHTML = `<option value="and">and</option>
-                    <option value="or">or</option>`;
-
-    const attributes = document.createElement('select');
-    attributes.classList.add('attributes');
-    attributes.innerHTML = `<option value="o.oaddress">Owner Address</option>
-                    <option value="o.oname">Owner Name</option>
-                    <option value="o.ocontact">Owner Contact</option>
-                    <option value="a.shelterAddress">Shelter Address on Application</option>
-                    <option value="a.ownerAddress">Owner Address on Application</option>
-                    <option value="a.id">Application id</option>
-                    <option value="a.applicationDate">Application Date</option>
-                    <option value="a.approvalStatus">Application Status</option>`;
-    
-    const predicates = document.createElement('select');
-    predicates.classList.add('predicates');
-    predicates.innerHTML = `<option value="=">=</option>
-                    <option value="!=">!=</option>
-                    <option value=">">&gt;</option>
-                    <option value="<">&lt;</option>
-                    <option value=">=">&ge;</option>
-                    <option value="<=">&le;</option>`;
-
-    const input = document.createElement('input');
-    input.classList.add('whereValue');
-    input.setAttribute('type', 'text');
-    input.setAttribute('placeholder', 'Enter value');
-    input.required = true;
-
-    newQueryDiv.appendChild(andOr);
-    newQueryDiv.appendChild(attributes);
-    newQueryDiv.appendChild(predicates);
-    newQueryDiv.appendChild(input);
-    querySetDiv.appendChild(newQueryDiv);
-}
-
-async function joinTableSubmitQuery(event) {
-    event.preventDefault();
-
-    const querySet = document.getElementById('querySet').querySelectorAll('.query');
-    let fullQueryString = "";
-
-    console.log(querySet.length);
-
-    querySet.forEach((query, index) => {
-        let currQuery = "";
-        const currAttribute = query.querySelector('.attributes').value;
-        const currPredicate = query.querySelector('.predicates').value;
-        const currInput = query.querySelector('.whereValue').value;
-
-        if (index > 0) {
-            const currAndOr = query.querySelector('.andOr').value;
-            currQuery = " " + currQuery + currAndOr + " ";
-            console.log(currAndOr);
-        }
-
-        currQuery = currQuery + currAttribute + " ";
-        currQuery = currQuery + currPredicate + " ";
-        currQuery = currQuery + currInput;
-
-        fullQueryString = fullQueryString + currQuery;
-
-        console.log(currQuery);
-        console.log(fullQueryString);
-    });
-
-    const response = await fetch('/join-table', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            query: fullQueryString
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('joinResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Join query result:";
-        console.log(responseData);
-
-    } else {
-        messageElement.textContent = "Error inserting query!";
-    }
-}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
@@ -436,11 +426,9 @@ async function joinTableSubmitQuery(event) {
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
-    // document.getElementById("resetPetTable").addEventListener("click", resetDemotable);
-    document.getElementById("insertDocTable").addEventListener("submit", insertDoctable);
-    document.getElementById("updateNamePetTable").addEventListener("submit", updateNameDemotable);
+    document.getElementById("insertPetTable").addEventListener("submit", insertDemotable);
+    document.getElementById("updatePetTable").addEventListener("submit", updateDemotable);
     document.getElementById("countPetTable").addEventListener("click", countDemotable);
-    document.getElementById("joinTableInput").addEventListener("submit", joinTableSubmitQuery);
 };
 
 // General function to refresh the displayed table data. 
