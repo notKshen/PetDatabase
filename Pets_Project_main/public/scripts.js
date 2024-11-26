@@ -342,8 +342,8 @@ async function joinTableAddQuery() {
 
     const andOr = document.createElement('select');
     andOr.classList.add('andOr');
-    andOr.innerHTML = `<option value="and">and</option>
-                    <option value="or">or</option>`;
+    andOr.innerHTML = `<option value="AND">and</option>
+                    <option value="OR">or</option>`;
 
     const attributes = document.createElement('select');
     attributes.classList.add('attributes');
@@ -382,7 +382,7 @@ async function joinTableSubmitQuery(event) {
     event.preventDefault();
 
     const querySet = document.getElementById('querySet').querySelectorAll('.query');
-    let fullQueryString = "";
+    let fullQueryString = "(";
 
     console.log(querySet.length);
 
@@ -394,19 +394,32 @@ async function joinTableSubmitQuery(event) {
 
         if (index > 0) {
             const currAndOr = query.querySelector('.andOr').value;
-            currQuery = " " + currQuery + currAndOr + " ";
+            currQuery += ` ${currAndOr} `;
             console.log(currAndOr);
         }
 
-        currQuery = currQuery + currAttribute + " ";
-        currQuery = currQuery + currPredicate + " ";
-        currQuery = currQuery + currInput;
+        currQuery += `${currAttribute} `;
+        currQuery += `${currPredicate} `;
 
-        fullQueryString = fullQueryString + currQuery;
+        switch (currAttribute) {
+            case "a.id":
+                currQuery += `${currInput}`;
+                break;
+            case "a.applicationDate":
+                currQuery += `TO_DATE('${currInput}','YYYY-MM-DD')`;
+                break;
+            default:
+                currQuery += `'${currInput}'`;
+                break;
+        }
+
+        fullQueryString += `${currQuery}`;
 
         console.log(currQuery);
         console.log(fullQueryString);
     });
+
+    fullQueryString += `)`;
 
     const response = await fetch('/join-table', {
         method: 'POST',
@@ -419,14 +432,34 @@ async function joinTableSubmitQuery(event) {
     });
 
     const responseData = await response.json();
+    const joinTableContent = responseData.data;
     const messageElement = document.getElementById('joinResultMsg');
+
+    const tableElement = document.getElementById('joinedTable');
+    const tableBody = tableElement.querySelector('tbody');
 
     if (responseData.success) {
         messageElement.textContent = "Join query result:";
-        console.log(responseData);
 
+        // Always clear old, already fetched data before new fetching process.
+        if (tableBody) {
+            tableBody.innerHTML = '';
+        }
+
+        if (joinTableContent.length == 0) {
+            messageElement.textContent += " No results!";
+            return;
+        }
+
+        joinTableContent.forEach(join => {
+            const row = tableBody.insertRow();
+            join.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
     } else {
-        messageElement.textContent = "Error inserting query!";
+        messageElement.textContent = "Error inserting join query!";
     }
 }
 

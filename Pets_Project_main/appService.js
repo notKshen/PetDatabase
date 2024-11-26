@@ -347,14 +347,14 @@ async function joinTable(query) {
         const result = await connection.execute(
             `SELECT * 
             FROM POwner o, AdoptionApplication a 
-            WHERE o.oaddress = a.ownerAddress AND :query`,
-            [query],
-            { autoCommit: true }
+            WHERE o.oaddress = a.ownerAddress 
+            AND ${query}`
         );
 
-        return result.rowsAffected && result.rowsAffected > 0;
+        const rows = result.rows;
+        return rows;
     }).catch(() => {
-        return false;
+        return null;
     });
 }
 
