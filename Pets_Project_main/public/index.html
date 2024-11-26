@@ -207,14 +207,14 @@
             <div class="query">
                 <label for="attributes">Where Clause: </label>
                 <select class="attributes" name="attributes" required>
-                    <option value="oaddress">Owner Address</option>
-                    <option value="oname">Owner Name</option>
-                    <option value="ocontact">Owner Contact</option>
-                    <option value="shelterAddress">Shelter Address on Application</option>
-                    <option value="ownerAddress">Owner Address on Application</option>
-                    <option value="id">Application id</option>
-                    <option value="applicationDate">Application Date</option>
-                    <option value="approvalStatus">Application Status</option>
+                    <option value="o.oaddress">Owner Address</option>
+                    <option value="o.oname">Owner Name</option>
+                    <option value="o.ocontact">Owner Contact</option>
+                    <option value="a.shelterAddress">Shelter Address on Application</option>
+                    <option value="a.ownerAddress">Owner Address on Application</option>
+                    <option value="a.id">Application id</option>
+                    <option value="a.applicationDate">Application Date</option>
+                    <option value="a.approvalStatus">Application Status</option>
                 </select>
 
                 <select class="predicates" name="predicates" required>
@@ -234,9 +234,8 @@
 
         <button type="submit"> insert </button> <br>
     </form>
-    <div id="insertResultMsg"></div>
+    <div id="joinResultMsg"></div> <br> <br>
 
-    <h2>Show Joined table between PetOwnerTable and AdoptionApplicationTable</h2>
     <table id="joinedTable" border="1 px">
         <thead>
             <tr>
