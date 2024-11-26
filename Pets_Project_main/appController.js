@@ -59,19 +59,11 @@ router.get('/dogtable', async (req, res) => {
 
 
 
+////
 
-router.post("/initiate-demotable", async (req, res) => {
-    const initiateResult = await appService.initiateDemotable();
-    if (initiateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-
-router.post("/insert-doctable", async (req, res) => {
-    const { pid, vetcon, id, ddesc, ddate } = req.body;
-    const insertResult = await appService.insertDoctable(pid, vetcon, id, ddesc, ddate);
+router.post("/insert-demotable", async (req, res) => {
+    const { id, name } = req.body;
+    const insertResult = await appService.insertDemotable(id, name);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -79,6 +71,16 @@ router.post("/insert-doctable", async (req, res) => {
     }
 });
 
+router.post('/filter-columns', async (req, res) => {
+    const { columns } = req.body;
+    try {
+        const filteredData = await appService.getFilteredColumns(columns);
+        res.json({ success: true, data: filteredData });
+    } catch (error) {
+        console.error('Error filtering columns:', error);
+        res.status(500).json({ success: false });
+    }
+});
 
 router.post("/update-demotable", async (req, res) => {
     const { field, oldValue, newValue, petID } = req.body;  
@@ -105,6 +107,7 @@ router.get('/count-demotable', async (req, res) => {
         });
     }
 });
+
 
 
 router.post("/join-table", async (req, res) => {

@@ -80,7 +80,6 @@ async function testOracleConnection() {
 
 async function fetchPettableFromDb() {
     return await withOracleDB(async (connection) => {
-
         const result = await connection.execute(
             `SELECT 
             p1.pid,
@@ -110,39 +109,11 @@ async function fetchPettableFromDb() {
             AND p1.pid = p9.pid
             AND p1.pid = p10.pid
             `);
-
         return result.rows;
     }).catch(() => {
         return [];
     });
 }
-
-
-// async function fetchPettableFromDb() {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute(
-//             'SELECT Pet1.pid, Pet1.pname, Pet2.species, Pet2.age, Pet2.dietaryRequirements, Pet4.healthCondition, Pet5.adoptionDate, Pet6.arriveDate, Pet8.breed, Pet10.ownerAddress, Pet11.carePlan, Pet8.lifespan FROM 
-//     Pet1, Pet2, Pet3, Pet4, Pet5, Pet6, Pet7, Pet8, Pet9, Pet10, Pet11
-// WHERE 
-//     Pet1.pid = Pet3.pid
-//     AND Pet1.pid = Pet4.pid
-//     AND Pet1.pid = Pet5.pid
-//     AND Pet1.pid = Pet6.pid
-//     AND Pet1.pid = Pet7.pid
-//     AND Pet1.pid = Pet9.pid
-//     AND Pet1.pid = Pet10.pid
-//     AND Pet2.species = Pet7.species
-//     AND Pet2.age = Pet3.age
-//     AND Pet8.species = Pet7.species
-//     AND Pet8.breed = Pet9.breed
-//     AND Pet11.species = Pet7.species
-//     AND Pet11.dietaryRequirements = Pet2.dietaryRequirements
-//     AND Pet11.healthCondition = Pet4.healthCondition;');
-//         return result.rows;
-//     }).catch(() => {
-//         return [];
-//     });
-// }
 
 async function fetchDoctableFromDb() {
     return await withOracleDB(async (connection) => {
@@ -211,31 +182,11 @@ async function fetchDogtableFromDb() {
 ////
 
 
-async function initiateDemotable() {
-    return await withOracleDB(async (connection) => {
-        try {
-            await connection.execute(`DROP TABLE Pet1 cascade constraints`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
-
-        const result = await connection.execute(`
-            create table Pet1 (
-                pid 		integer	primary key,
-                pname		varchar (12)
-            )
-        `);
-        return true;
-    }).catch(() => {
-        return false;
-    });
-}
-
-async function insertDoctable(pid, vetcon, id, ddesc, ddate) {
+async function insertDemotable(id, name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO Documentation (pid, veterinarianContact, id, ddescription, ddate) VALUES (:pid, :vetcon, :id, :ddesc, TO_DATE (:ddate, 'YYYY-MM-DD'))`,
-            [pid, vetcon, id, ddesc, ddate],
+            `INSERT INTO Pet1 (pid, pname) VALUES (:id, :name)`,
+            [id, name],
             { autoCommit: true }
         );
 
@@ -244,6 +195,18 @@ async function insertDoctable(pid, vetcon, id, ddesc, ddate) {
         return false;
     });
 }
+
+async function getFilteredColumns(columns) {
+    return await withOracleDB(async (connection) => {
+      const selectedColumns = columns.map((col) => `${col}`).join(', ');
+      const query = `SELECT ${selectedColumns} FROM Dog`;
+      const result = await connection.execute(query);
+      return result.rows;
+    }).catch((err) => {
+      console.error('Error during column filtering:', err);
+      throw err;
+    });
+  }
 
 async function updateDemotable(field, oldValue, newValue, petID) {
     return await withOracleDB(async (connection) => {
@@ -330,7 +293,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
       return false;
     });
   }
-
+  
 
 async function countDemotable() {
     return await withOracleDB(async (connection) => {
@@ -340,7 +303,6 @@ async function countDemotable() {
         return -1;
     });
 }
-
 
 async function joinTable(query) {
     return await withOracleDB(async (connection) => {
@@ -368,10 +330,8 @@ module.exports = {
     fetchSheltertableFromDb,
     fetchPurchasesFromtableFromDb,
     fetchDogtableFromDb,
+    insertDemotable, 
     updateDemotable, 
-    initiateDemotable, 
-    insertDoctable, 
-    updateNameDemotable, 
     countDemotable,
-    joinTable
+    getFilteredColumns,
 };
