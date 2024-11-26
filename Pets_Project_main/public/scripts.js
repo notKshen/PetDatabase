@@ -419,6 +419,133 @@ async function countDemotable() {
     }
 }
 
+async function joinTableAddQuery() {
+    const querySetDiv = document.getElementById('querySet');
+    const newQueryDiv = document.createElement('div');
+    newQueryDiv.classList.add('query');
+
+    const andOr = document.createElement('select');
+    andOr.classList.add('andOr');
+    andOr.innerHTML = `<option value="AND">and</option>
+                    <option value="OR">or</option>`;
+
+    const attributes = document.createElement('select');
+    attributes.classList.add('attributes');
+    attributes.innerHTML = `<option value="o.oaddress">Owner Address</option>
+                    <option value="o.oname">Owner Name</option>
+                    <option value="o.ocontact">Owner Contact</option>
+                    <option value="a.shelterAddress">Shelter Address on Application</option>
+                    <option value="a.ownerAddress">Owner Address on Application</option>
+                    <option value="a.id">Application id</option>
+                    <option value="a.applicationDate">Application Date</option>
+                    <option value="a.approvalStatus">Application Status</option>`;
+    
+    const predicates = document.createElement('select');
+    predicates.classList.add('predicates');
+    predicates.innerHTML = `<option value="=">=</option>
+                    <option value="!=">!=</option>
+                    <option value=">">&gt;</option>
+                    <option value="<">&lt;</option>
+                    <option value=">=">&ge;</option>
+                    <option value="<=">&le;</option>`;
+
+    const input = document.createElement('input');
+    input.classList.add('whereValue');
+    input.setAttribute('type', 'text');
+    input.setAttribute('placeholder', 'Enter value');
+    input.required = true;
+
+    newQueryDiv.appendChild(andOr);
+    newQueryDiv.appendChild(attributes);
+    newQueryDiv.appendChild(predicates);
+    newQueryDiv.appendChild(input);
+    querySetDiv.appendChild(newQueryDiv);
+}
+
+async function joinTableSubmitQuery(event) {
+    event.preventDefault();
+
+    const querySet = document.getElementById('querySet').querySelectorAll('.query');
+    let fullQueryString = "(";
+
+    console.log(querySet.length);
+
+    querySet.forEach((query, index) => {
+        let currQuery = "";
+        const currAttribute = query.querySelector('.attributes').value;
+        const currPredicate = query.querySelector('.predicates').value;
+        const currInput = query.querySelector('.whereValue').value;
+
+        if (index > 0) {
+            const currAndOr = query.querySelector('.andOr').value;
+            currQuery += ` ${currAndOr} `;
+            console.log(currAndOr);
+        }
+
+        currQuery += `${currAttribute} `;
+        currQuery += `${currPredicate} `;
+
+        switch (currAttribute) {
+            case "a.id":
+                currQuery += `${currInput}`;
+                break;
+            case "a.applicationDate":
+                currQuery += `TO_DATE('${currInput}','YYYY-MM-DD')`;
+                break;
+            default:
+                currQuery += `'${currInput}'`;
+                break;
+        }
+
+        fullQueryString += `${currQuery}`;
+
+        console.log(currQuery);
+        console.log(fullQueryString);
+    });
+
+    fullQueryString += `)`;
+
+    const response = await fetch('/join-table', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            query: fullQueryString
+        })
+    });
+
+    const responseData = await response.json();
+    const joinTableContent = responseData.data;
+    const messageElement = document.getElementById('joinResultMsg');
+
+    const tableElement = document.getElementById('joinedTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    if (responseData.success) {
+        messageElement.textContent = "Join query result:";
+
+        // Always clear old, already fetched data before new fetching process.
+        if (tableBody) {
+            tableBody.innerHTML = '';
+        }
+
+        if (joinTableContent.length == 0) {
+            messageElement.textContent += " No results!";
+            return;
+        }
+
+        joinTableContent.forEach(join => {
+            const row = tableBody.insertRow();
+            join.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    } else {
+        messageElement.textContent = "Error inserting join query!";
+    }
+}
 
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.

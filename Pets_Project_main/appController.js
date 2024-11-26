@@ -109,4 +109,15 @@ router.get('/count-demotable', async (req, res) => {
 });
 
 
+
+router.post("/join-table", async (req, res) => {
+    const { query } = req.body;
+    const joinResult = await appService.joinTable(query);
+    if (joinResult != null) {
+        res.json({ success: true, data: joinResult });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 module.exports = router;

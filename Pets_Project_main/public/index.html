@@ -218,6 +218,61 @@
     <!-- A placeholder to display the count result. -->
     <div id="countResultMsg"></div> <br>
 
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> 2.1.6 Join Values on PetOwnerTable and AdoptionApplicationTable</h2>
+    <div>If entering a date, please write in "YYYY-MM-DD" format.</div> <br> <br>
+    <form id="joinTableInput">
+        <div id="querySet">
+            <div class="query">
+                <label for="attributes">Where Clause: </label>
+                <select class="attributes" name="attributes" required>
+                    <option value="o.oaddress">Owner Address</option>
+                    <option value="o.oname">Owner Name</option>
+                    <option value="o.ocontact">Owner Contact</option>
+                    <option value="a.shelterAddress">Shelter Address on Application</option>
+                    <option value="a.ownerAddress">Owner Address on Application</option>
+                    <option value="a.id">Application id</option>
+                    <option value="a.applicationDate">Application Date</option>
+                    <option value="a.approvalStatus">Application Status</option>
+                </select>
+
+                <select class="predicates" name="predicates" required>
+                    <option value="=">=</option>
+                    <option value="!=">!=</option>
+                    <option value=">">&gt;</option>
+                    <option value="<">&lt;</option>
+                    <option value=">=">&ge;</option>
+                    <option value="<=">&le;</option>
+                </select>
+
+                <input type="text" class="whereValue" placeholder="Enter value" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="joinTableAddQuery()"> Add a clause </button> <br> <br>
+
+        <button type="submit"> insert </button> <br>
+    </form>
+    <div id="joinResultMsg"></div> <br> <br>
+
+    <table id="joinedTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Owner Address</th>
+                <th>Owner Name</th>
+                <th>Owner Contact</th>
+                <th>Shelter Address on Application</th>
+                <th>Owner Address on Application</th>
+                <th>Application id</th>
+                <th>Application Date</th>
+                <th>Application Approval Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>

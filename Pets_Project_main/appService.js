@@ -304,6 +304,22 @@ async function countDemotable() {
     });
 }
 
+async function joinTable(query) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT * 
+            FROM POwner o, AdoptionApplication a 
+            WHERE o.oaddress = a.ownerAddress 
+            AND ${query}`
+        );
+
+        const rows = result.rows;
+        return rows;
+    }).catch(() => {
+        return null;
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchPettableFromDb,
