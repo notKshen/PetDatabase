@@ -194,32 +194,35 @@ async function fetchDogtableFromDb() {
 
 ////
 
-
-async function initiateDemotable() {
+async function fetchSortYoungFromDb() {
     return await withOracleDB(async (connection) => {
-        try {
-            await connection.execute(`DROP TABLE Pet1 cascade constraints`);
-        } catch(err) {
-            console.log('Table might not exist, proceeding to create...');
-        }
-
-        const result = await connection.execute(`
-            create table Pet1 (
-                pid 		integer	primary key,
-                pname		varchar (12)
+        const result = await connection.execute(
+            `
+            SELECT P1.pid, P1.age, P2.species
+            FROM Pet3 P1
+            JOIN Pet7 P2 ON P1.pid = P2.pid
+            WHERE P1.age <= (
+                SELECT AVG(P3.age)
+                FROM Pet3 P3
+                JOIN Pet7 P4 ON P3.pid = P4.pid
+                WHERE P4.species = P2.species
+                GROUP BY P4.species
             )
-        `);
-        return true;
-    }).catch(() => {
-        return false;
+            `
+        );
+        return result.rows;
+    }).catch((err) => {
+        console.error('Error fetching data:', err);
+        return [];
     });
 }
 
-async function insertDoctable(pid, vetcon, id, ddesc, ddate) {
+
+async function insertDemotable(id, name) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO Documentation (pid, veterinarianContact, id, ddescription, ddate) VALUES (:pid, :vetcon, :id, :ddesc, TO_DATE (:ddate, 'YYYY-MM-DD'))`,
-            [pid, vetcon, id, ddesc, ddate],
+            `INSERT INTO Pet1 (pid, pname) VALUES (:id, :name)`,
+            [id, name],
             { autoCommit: true }
         );
 
@@ -228,6 +231,18 @@ async function insertDoctable(pid, vetcon, id, ddesc, ddate) {
         return false;
     });
 }
+
+async function getFilteredColumns(columns) {
+    return await withOracleDB(async (connection) => {
+      const selectedColumns = columns.map((col) => `${col}`).join(', ');
+      const query = `SELECT ${selectedColumns} FROM Dog`;
+      const result = await connection.execute(query);
+      return result.rows;
+    }).catch((err) => {
+      console.error('Error during column filtering:', err);
+      throw err;
+    });
+  }
 
 async function updateDemotable(field, oldValue, newValue, petID) {
     return await withOracleDB(async (connection) => {
@@ -315,7 +330,6 @@ async function updateDemotable(field, oldValue, newValue, petID) {
     });
   }
 
-
 async function countDemotable() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT Count(*) FROM Pet1');
@@ -386,10 +400,11 @@ module.exports = {
     fetchSheltertableFromDb,
     fetchPurchasesFromtableFromDb,
     fetchDogtableFromDb,
-    updateDemotable, 
-    initiateDemotable, 
-    insertDoctable,
-    countDemotable,
     joinTable,
-    havingQuery
+    havingQuery,
+    insertDemotable, 
+    updateDemotable, 
+    countDemotable,
+    getFilteredColumns,
+    fetchSortYoungFromDb
 };
