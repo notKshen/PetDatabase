@@ -59,6 +59,7 @@ router.get('/dogtable', async (req, res) => {
 
 
 
+
 ////
 router.get('/sortYoungPet', async (req, res) => {
     const tableContent = await appService.fetchSortYoungFromDb();
@@ -122,6 +123,11 @@ router.post("/join-table", async (req, res) => {
     } else {
         res.status(500).json({ success: false });
     }
+});
+
+router.get("/having-query", async (req, res) => {
+    const havingResult = await appService.havingQuery();
+    res.json({data: havingResult});
 });
 
 module.exports = router;

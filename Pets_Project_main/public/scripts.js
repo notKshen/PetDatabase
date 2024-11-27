@@ -580,6 +580,40 @@ async function joinTableSubmitQuery(event) {
     }
 }
 
+async function havingQuery() {
+    const tableElement = document.getElementById('havingTable');
+    const tableBody = tableElement.querySelector('tbody');
+    
+    const response = await fetch('/having-query', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const havingtableContent = responseData.data;
+
+    const messageElement = document.getElementById('havingResultMsg');
+
+    messageElement.textContent = "Aggregate with having query result:";
+        
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    if (havingtableContent.length == 0) {
+        messageElement.textContent += " No results!";
+        return;
+    }
+
+    havingtableContent.forEach(breed => {
+        const row = tableBody.insertRow();
+        breed.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
