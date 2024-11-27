@@ -1,175 +1,182 @@
 /* GLOBAL STYLES */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    padding: 40px;
-    max-width: 800px;
-    margin: auto;
-    line-height: 1.6;
-    background-color: #fffef5f9;
-    color: #313131;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+  line-height: 1.6;
+  background-color: #fffef5f9;
+  color: #313131;
 }
 
 hr {
-    border-top: 2px solid rgb(44, 51, 62);
-    margin: auto;
+  border-top: 2px solid rgb(44, 51, 62);
+  margin: auto;
 }
 
 /* TABLE STYLES */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+  background-color: #f2f2f2;
+  font-weight: bold;
 }
 
 tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 tr:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
+  background-color: #f5f5f5;
+  cursor: pointer;
 }
 
 button {
-    background-color: rgb(32, 107, 227);
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    outline: none;
+  background-color: rgb(32, 107, 227);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  outline: none;
 }
 
 button:hover {
-    background-color: rgb(22, 87, 207);
+  background-color: rgb(22, 87, 207);
 }
 
 button:active {
-    background-color: rgb(12, 67, 187);
+  background-color: rgb(12, 67, 187);
 }
 
 /* INPUT STYLES */
 input, textarea {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 }
 
 input::placeholder, textarea::placeholder {
-    color: #aaa;
+  color: #aaa;
 }
 
 /* OTHER STYLES */
 .loading-gif {
-    height: 1em;
-    vertical-align: middle;
+  height: 1em;
+  vertical-align: middle;
 }
- /* Update Button */
-  .form-select {
-    width: 200px;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #f1f1f1;
-    border: 2px solid rgb(32, 107, 227);
-    border-radius: 4px;
-    appearance: none; 
-    cursor: pointer;
-    display: block;
-    margin: 10px 0;
-  }
 
-  .hidden {
-    display: none;
-  }
+/* SortYoung Button */
+.sortButton {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
-  /* Filter Button */
-  .filter-container {
-    border: 1px solid #ddd;
-    padding: 15px;
-    width: 250px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: none;
-    position: absolute;
-    top: 3630px;
-    right: 100px; /* Align to the right */
-    background-color: white;
-    z-index: 10;
-  }
+/* Update Button */
+.form-select {
+  width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f1f1f1;
+  border: 2px solid rgb(32, 107, 227);
+  border-radius: 4px;
+  appearance: none; 
+  cursor: pointer;
+  display: block;
+  margin: 10px 0;
+}
 
-  .filter-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-  }
+.hidden {
+  display: none;
+}
 
-  .filter-option {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  
-  .filter-option input[type="checkbox"] {
-    margin-right: 8px;
-    transform: translateY(-1px); 
-    width: 16px; 
-    height: 16px; 
-  }
-  
-  .filter-option label {
-    margin-bottom: 8px;
-    color: #555;
-    font-size: 16px; 
-  }
+/* Filter Button */
+.filter-container {
+  border: 1px solid #ddd;
+  padding: 15px;
+  width: 250px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: none;
+  position: absolute;
+  margin-top: -40px;
+  margin-left: 775px;
+  background-color: white;
+  z-index: 10;
+}
 
-  .filter-container button {
-    margin-top: 10px;
-    padding: 8px 15px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.filter-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
 
-  .filter-container button:hover {
-    background-color: #0056b3;
-  }
+.filter-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
 
-  .filter-icon-container {
-    display: flex;
-    justify-content: flex-end; 
-    margin-bottom: 10px;
-  }
+.filter-option input[type="checkbox"] {
+  margin-right: 8px;
+  transform: translateY(-1px); 
+  width: 16px; 
+  height: 16px; 
+}
 
-  .filter-icon {
-    font-size: 24px;
-    color: #28a745;
-    cursor: pointer;
-  }
+.filter-option label {
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 16px; 
+}
 
-  .filter-icon:hover {
-    color: #218838;
-  }
+.filter-container button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filter-container button:hover {
+  background-color: #0056b3;
+}
+
+.filter-icon-container {
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 10px;
+}
+
+.filter-icon {
+  font-size: 24px;
+  color: #28a745;
+  cursor: pointer;
+}
+
+.filter-icon:hover {
+  color: #218838;
+}
