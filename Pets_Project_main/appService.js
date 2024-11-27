@@ -78,40 +78,55 @@ async function testOracleConnection() {
 
 // fetches data from relations in database
 
-async function fetchPettableFromDb() {
+async function fetchPettableFromDb(){
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Pet1');
-        return result.rows;
+        const result = await connection.execute(`
+            SELECT 
+                Pet1.pid,
+                Pet1.pname,
+                Pet2.species,
+                Pet2.age,
+                Pet2.dietaryRequirements,
+                Pet4.healthCondition,
+                Pet5.adoptionDate,
+                Pet6.arriveDate,
+                Pet8.breed,
+                Pet10.ownerAddress,
+                Pet11.carePlan,
+                Pet8.lifespan
+            FROM 
+                Pet1, Pet2, Pet3, Pet4, Pet5, Pet6, Pet7, Pet8, Pet9, Pet10, Pet11
+            WHERE 
+                Pet1.pid = Pet3.pid
+                AND Pet1.pid = Pet4.pid
+                AND Pet1.pid = Pet5.pid
+                AND Pet1.pid = Pet6.pid
+                AND Pet1.pid = Pet7.pid
+                AND Pet1.pid = Pet9.pid
+                AND Pet1.pid = Pet10.pid
+                AND Pet2.species = Pet7.species
+                AND Pet2.age = Pet3.age
+                AND Pet8.species = Pet7.species
+                AND Pet8.breed = Pet9.breed
+                AND Pet11.dietaryRequirements = Pet2.dietaryRequirements
+                AND Pet11.healthCondition = Pet4.healthCondition
+                AND Pet11.species = Pet7.species
+        `);
+        const rows = result.rows;
+
+        rows.forEach((row, rowIndex) => {
+            row.forEach((field, index) => {
+                if (field instanceof Date) {
+                    row[index] = field.toISOString().split('T')[0];
+                }
+            });
+        });
+
+        return rows;
     }).catch(() => {
         return [];
     });
 }
-
-// async function fetchPettableFromDb() {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute(
-//             'SELECT Pet1.pid, Pet1.pname, Pet2.species, Pet2.age, Pet2.dietaryRequirements, Pet4.healthCondition, Pet5.adoptionDate, Pet6.arriveDate, Pet8.breed, Pet10.ownerAddress, Pet11.carePlan, Pet8.lifespan FROM 
-//     Pet1, Pet2, Pet3, Pet4, Pet5, Pet6, Pet7, Pet8, Pet9, Pet10, Pet11
-// WHERE 
-//     Pet1.pid = Pet3.pid
-//     AND Pet1.pid = Pet4.pid
-//     AND Pet1.pid = Pet5.pid
-//     AND Pet1.pid = Pet6.pid
-//     AND Pet1.pid = Pet7.pid
-//     AND Pet1.pid = Pet9.pid
-//     AND Pet1.pid = Pet10.pid
-//     AND Pet2.species = Pet7.species
-//     AND Pet2.age = Pet3.age
-//     AND Pet8.species = Pet7.species
-//     AND Pet8.breed = Pet9.breed
-//     AND Pet11.species = Pet7.species
-//     AND Pet11.dietaryRequirements = Pet2.dietaryRequirements
-//     AND Pet11.healthCondition = Pet4.healthCondition;');
-//         return result.rows;
-//     }).catch(() => {
-//         return [];
-//     });
-// }
 
 async function fetchDoctableFromDb() {
     return await withOracleDB(async (connection) => {
@@ -179,6 +194,7 @@ async function fetchDogtableFromDb() {
 
 ////
 
+
 async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
@@ -213,33 +229,92 @@ async function insertDoctable(pid, vetcon, id, ddesc, ddate) {
     });
 }
 
-// async function insertDemotable(id, name) {
-//     return await withOracleDB(async (connection) => {
-//         const result = await connection.execute(
-//             `INSERT INTO Pet1 (pid, pname) VALUES (:id, :name)`,
-//             [id, name],
-//             { autoCommit: true }
-//         );
-
-//         return result.rowsAffected && result.rowsAffected > 0;
-//     }).catch(() => {
-//         return false;
-//     });
-// }
-
-async function updateNameDemotable(oldName, newName) {
+async function updateDemotable(field, oldValue, newValue, petID) {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `UPDATE Pet1 SET pname=:newName where pname=:oldName`,
-            [newName, oldName],
+      let result;
+  
+      switch (field) {
+        case "name":
+          result = await connection.execute(
+            `UPDATE Pet1 SET pname = :newValue WHERE pname = :oldValue AND pid = :petID`,
+            [newValue, oldValue, petID],
             { autoCommit: true }
-        );
+          );
+          break;
+  
+        case "age":
+          result = await connection.execute(
+            `UPDATE Pet3 SET age = :newValue WHERE age = :oldValue AND pid = :petID`,
+            [Number(newValue), Number(oldValue), petID],
+            { autoCommit: true }
+          );
+          break;
+  
+        case "healthCondition":
+          result = await connection.execute(
+            `UPDATE Pet4 SET healthCondition = :newValue WHERE healthCondition = :oldValue AND pid = :petID`,
+            [newValue, oldValue, petID],
+            { autoCommit: true }
+          );
+          break;
+  
+          case "adoptionDate": 
 
-        return result.rowsAffected && result.rowsAffected > 0;
-    }).catch(() => {
-        return false;
+          let formattedOldDate;
+          let formattedNewDate;
+
+            if(oldValue != '') {
+                formattedOldDate = new Date(oldValue).toISOString().split('T')[0];
+            }
+            if(newValue != '') {
+                formattedNewDate = new Date(newValue).toISOString().split('T')[0]; 
+            }
+            
+            if(oldValue == '') {
+                result = await connection.execute(
+                    `UPDATE Pet5 SET adoptionDate = TO_DATE(:newValue, 'YYYY-MM-DD') WHERE pid = :petID`,
+                    [formattedNewDate, petID],  
+                    { autoCommit: true }  
+                );
+            }
+            else if (newValue == '') {
+                result = await connection.execute(
+                    `UPDATE Pet5 SET adoptionDate = NULL WHERE adoptionDate = TO_DATE(:oldValue, 'YYYY-MM-DD') AND pid = :petID`,
+                    [formattedOldDate, petID],  
+                    { autoCommit: true }  
+                );
+            }
+            else {
+                result = await connection.execute(
+                    `UPDATE Pet5 SET adoptionDate = TO_DATE(:newValue, 'YYYY-MM-DD') WHERE adoptionDate = TO_DATE(:oldValue, 'YYYY-MM-DD') AND pid = :petID`,
+                    [formattedNewDate, formattedOldDate, petID],  
+                    { autoCommit: true }  
+                );
+            }
+
+            break;
+  
+        case "ownerAddress":
+            result = await connection.execute(
+                // Should be ON UPDATE CASCADE for foreign key
+                `UPDATE Pet10 SET ownerAddress = :newValue WHERE ownerAddress = :oldValue AND pid = :petID`,
+                [newValue, oldValue, petID],
+                { autoCommit: true }
+              );
+          break;
+  
+        default:
+          throw new Error(`Unknown field: ${field}`);
+      }
+  
+      // Return true if rows were updated
+      return result.rowsAffected && result.rowsAffected > 0;
+    }).catch((err) => {
+      console.error("Error during update:", err);
+      return false;
     });
-}
+  }
+
 
 async function countDemotable() {
     return await withOracleDB(async (connection) => {
@@ -249,6 +324,7 @@ async function countDemotable() {
         return -1;
     });
 }
+
 
 async function joinTable(query) {
     return await withOracleDB(async (connection) => {
@@ -266,6 +342,40 @@ async function joinTable(query) {
     });
 }
 
+async function havingQuery() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT 
+                Pet7.species, AVG(Pet2.age)
+            FROM 
+                Pet1, Pet2, Pet3, Pet4, Pet5, Pet6, Pet7, Pet8, Pet9, Pet10, Pet11
+            WHERE 
+                Pet1.pid = Pet3.pid
+                AND Pet1.pid = Pet4.pid
+                AND Pet1.pid = Pet5.pid
+                AND Pet1.pid = Pet6.pid
+                AND Pet1.pid = Pet7.pid
+                AND Pet1.pid = Pet9.pid
+                AND Pet1.pid = Pet10.pid
+                AND Pet2.species = Pet7.species
+                AND Pet2.age = Pet3.age
+                AND Pet8.species = Pet7.species
+                AND Pet8.breed = Pet9.breed
+                AND Pet11.species = Pet7.species
+                AND Pet11.dietaryRequirements = Pet2.dietaryRequirements
+                AND Pet11.healthCondition = Pet4.healthCondition
+            GROUP BY
+                Pet7.species
+            HAVING
+                AVG(Pet2.age) > 5`);
+
+        const rows = result.rows;
+        return rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchPettableFromDb,
@@ -276,9 +386,10 @@ module.exports = {
     fetchSheltertableFromDb,
     fetchPurchasesFromtableFromDb,
     fetchDogtableFromDb,
+    updateDemotable, 
     initiateDemotable, 
-    insertDoctable, 
-    updateNameDemotable, 
+    insertDoctable,
     countDemotable,
-    joinTable
+    joinTable,
+    havingQuery
 };

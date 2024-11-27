@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
-    <!-- <link rel="stylesheet" href="styles.css">   -->
+    <link rel="stylesheet" href="styles.css">  
 
     <title>Database Application</title>
 </head>
@@ -26,7 +26,7 @@
 
     <!-- Show 'PetTable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
-    <h2>Show PetTable</h2>
+    <!-- <h2>Show PetTable</h2>
     <table id="petTable" border="1 px">
         <thead>
             <tr>
@@ -36,9 +36,9 @@
         </thead>
         <tbody>
         </tbody>
-    </table>
+    </table> -->
 
-    <!-- <h2>Show PetTable</h2>
+    <h2>Show PetTable</h2>
     <table id="petTable" border="1 px">
         <thead>
             <tr>
@@ -59,7 +59,7 @@
         <tbody>
         </tbody>
     </table>
-     -->
+    
     <h2>Show DocumentationTable</h2>
     <table id="docTable" border="1 px">
         <thead>
@@ -253,6 +253,20 @@
         </tbody>
     </table>
 
+    <h2> 2.1.8 Aggregation with HAVING - For all pets, find the average ages of pet breeds greater than 5</h2>
+
+    <button type="button" onclick="havingQuery()">Show</button> <br> <br>
+    <div id="havingResultMsg"></div>
+    <table id="havingTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Pet Species</th>
+                <th>Average Age</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
     <!-- ===================================================================================== -->
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>

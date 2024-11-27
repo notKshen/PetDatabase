@@ -53,13 +53,13 @@ router.get('/purchasesfromtable', async (req, res) => {
 });
 
 router.get('/dogtable', async (req, res) => {
-    const tableContent = await appService.fetchSheltertableFromDb();
+    const tableContent = await appService.fetchDogtableFromDb();
     res.json({data: tableContent});
 });
 
 
 
-////
+
 router.post("/initiate-demotable", async (req, res) => {
     const initiateResult = await appService.initiateDemotable();
     if (initiateResult) {
@@ -79,15 +79,17 @@ router.post("/insert-doctable", async (req, res) => {
     }
 });
 
-router.post("/update-name-demotable", async (req, res) => {
-    const { oldName, newName } = req.body;
-    const updateResult = await appService.updateNameDemotable(oldName, newName);
+
+router.post("/update-demotable", async (req, res) => {
+    const { field, oldValue, newValue, petID } = req.body;  
+    const updateResult = await appService.updateDemotable(field, oldValue, newValue, petID);
+  
     if (updateResult) {
-        res.json({ success: true });
+      res.json({ success: true });
     } else {
-        res.status(500).json({ success: false });
+      res.status(500).json({ success: false });
     }
-});
+  });
 
 router.get('/count-demotable', async (req, res) => {
     const tableCount = await appService.countDemotable();
@@ -112,6 +114,11 @@ router.post("/join-table", async (req, res) => {
     } else {
         res.status(500).json({ success: false });
     }
+});
+
+router.get("/having-query", async (req, res) => {
+    const havingResult = await appService.havingQuery();
+    res.json({data: havingResult});
 });
 
 module.exports = router;
