@@ -266,6 +266,39 @@ async function insertDemotable(event) {
     }
 }
 
+async function sortYoung() {
+    const tableElement = document.getElementById('youngTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    if (!tableElement.classList.contains('hidden')) {
+        tableElement.classList.add('hidden');
+        return; 
+    }
+
+    const response = await fetch('/sortYoungPet', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const pettableContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    pettableContent.forEach(pet => {
+        const row = tableBody.insertRow();
+        pet.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+    tableElement.classList.remove('hidden');
+    const resultMsg = document.getElementById("updateMsg");
+    resultMsg.textContent = 'Displaying animals of each species whose ages are below or equal to the average age of that species.';
+}
+
+
 // Toggle the visibility of the filter container
 
 function toggleFilter() {

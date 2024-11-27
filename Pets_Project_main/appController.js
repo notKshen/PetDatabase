@@ -60,6 +60,10 @@ router.get('/dogtable', async (req, res) => {
 
 
 ////
+router.get('/sortYoungPet', async (req, res) => {
+    const tableContent = await appService.fetchSortYoungFromDb();
+    res.json({data: tableContent});
+});
 
 router.post("/insert-demotable", async (req, res) => {
     const { id, name } = req.body;

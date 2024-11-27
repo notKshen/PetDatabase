@@ -181,6 +181,29 @@ async function fetchDogtableFromDb() {
 
 ////
 
+async function fetchSortYoungFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `
+            SELECT P1.pid, P1.age, P2.species
+            FROM Pet3 P1
+            JOIN Pet7 P2 ON P1.pid = P2.pid
+            WHERE P1.age <= (
+                SELECT AVG(P3.age)
+                FROM Pet3 P3
+                JOIN Pet7 P4 ON P3.pid = P4.pid
+                WHERE P4.species = P2.species
+                GROUP BY P4.species
+            )
+            `
+        );
+        return result.rows;
+    }).catch((err) => {
+        console.error('Error fetching data:', err);
+        return [];
+    });
+}
+
 
 async function insertDemotable(id, name) {
     return await withOracleDB(async (connection) => {
@@ -334,4 +357,5 @@ module.exports = {
     updateDemotable, 
     countDemotable,
     getFilteredColumns,
+    fetchSortYoungFromDb,
 };
