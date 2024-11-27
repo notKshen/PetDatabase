@@ -59,13 +59,12 @@ create table Shelter (
 grant select on Shelter to public;
 
 create table POwner(
-	ownerAddress	varchar	(50) primary key,
-	ownerName	varchar (10),
+	oaddress	varchar	(50) primary key,
+	oname	varchar (10),
 	contact	varchar (12),
 	unique (contact)
 );
 grant select on POwner to public;
-grant update on POwner to public;
 
 create table Veterinarian(
 	contact	varchar	(12) primary key,
@@ -101,7 +100,6 @@ create table Pet1 (
 	pname		varchar (12)
 );
 grant select on Pet1 to public;
-grant update on Pet1 to public;
 
 create table Pet2 (
 	species			varchar (30),
@@ -117,7 +115,6 @@ create table Pet3 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet3 to public;
-grant update on Pet3 to public;
 
 create table Pet4 (
 	pid			integer	primary key,
@@ -125,7 +122,6 @@ create table Pet4 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet4 to public;
-grant update on Pet4 to public;
 
 create table Pet5 (
 	pid			integer	primary key,
@@ -133,7 +129,6 @@ create table Pet5 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet5 to public;
-grant update on Pet5 to public;
 
 create table Pet6 (
 	pid			integer	primary key,
@@ -141,7 +136,6 @@ create table Pet6 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet6 to public;
-
 
 create table Pet7 (
 	pid			integer	primary key,
@@ -172,7 +166,6 @@ create table Pet10 (
 	foreign key (ownerAddress) references POwner
 );
 grant select on Pet10 to public;
-grant update on Pet10 to public;
 
 create table Pet11 (
 	species					varchar (30),
