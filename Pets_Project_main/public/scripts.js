@@ -87,6 +87,41 @@ async function fetchAndDisplayDocs() {
     });
 }
 
+// Inserts new records into the demotable.
+async function insertDoctable(event) {
+    event.preventDefault();
+
+    const pidValue = document.getElementById('insertPID').value;
+    const vetConValue = document.getElementById('insertVetCon').value;
+    const idValue = document.getElementById('insertId').value;
+    const descValue = document.getElementById('insertDesc').value;
+    const dateValue = document.getElementById('insertDate').value;
+
+    const response = await fetch('/insert-doctable', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            pid: pidValue,
+            vetcon: vetConValue,
+            id: idValue,
+            ddesc: descValue,
+            ddate: dateValue
+        })
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('insertResultMsg');
+
+    if (responseData.success) {
+        messageElement.textContent = "Data inserted successfully!";
+        fetchTableData();
+    } else {
+        messageElement.textContent = "Error inserting data!";
+    }
+}
+
 async function fetchAndDisplayVets() {
     const tableElement = document.getElementById('vetTable');
     const tableBody = tableElement.querySelector('tbody');
@@ -235,35 +270,6 @@ async function fetchAndDisplayDogs() {
             cell.textContent = field;
         });
     });
-}
-
-// Inserts new records into the demotable.
-async function insertDemotable(event) {
-    event.preventDefault();
-
-    const idValue = document.getElementById('insertId').value;
-    const nameValue = document.getElementById('insertName').value;
-
-    const response = await fetch('/insert-demotable', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: idValue,
-            name: nameValue
-        })
-    });
-
-    const responseData = await response.json();
-    const messageElement = document.getElementById('insertResultMsg');
-
-    if (responseData.success) {
-        messageElement.textContent = "Data inserted successfully!";
-        fetchTableData();
-    } else {
-        messageElement.textContent = "Error inserting data!";
-    }
 }
 
 async function sortYoung() {
@@ -436,21 +442,21 @@ async function updateDemotable(event) {
 
 // Counts rows in the demotable.
 // Modify the function accordingly if using different aggregate functions or procedures.
-async function countDemotable() {
-    const response = await fetch("/count-demotable", {
-        method: 'GET'
-    });
+// async function countDemotable() {
+//     const response = await fetch("/count-demotable", {
+//         method: 'GET'
+//     });
 
-    const responseData = await response.json();
-    const messageElement = document.getElementById('countResultMsg');
+//     const responseData = await response.json();
+//     const messageElement = document.getElementById('countResultMsg');
 
-    if (responseData.success) {
-        const tupleCount = responseData.count;
-        messageElement.textContent = `The number of tuples in petTable: ${tupleCount}`;
-    } else {
-        alert("Error in count petTable!");
-    }
-}
+//     if (responseData.success) {
+//         const tupleCount = responseData.count;
+//         messageElement.textContent = `The number of tuples in petTable: ${tupleCount}`;
+//     } else {
+//         alert("Error in count petTable!");
+//     }
+// }
 
 async function joinTableAddQuery() {
     const querySetDiv = document.getElementById('querySet');
@@ -620,9 +626,10 @@ async function havingQuery() {
 window.onload = function() {
     checkDbConnection();
     fetchTableData();
-    document.getElementById("insertPetTable").addEventListener("submit", insertDemotable);
+    document.getElementById("insertDocTable").addEventListener("submit", insertDoctable);
     document.getElementById("updatePetTable").addEventListener("submit", updateDemotable);
-    document.getElementById("countPetTable").addEventListener("click", countDemotable);
+    // document.getElementById("countPetTable").addEventListener("click", countDemotable);
+    document.getElementById("joinTableInput").addEventListener("submit", joinTableSubmitQuery);
 };
 
 // General function to refresh the displayed table data. 
