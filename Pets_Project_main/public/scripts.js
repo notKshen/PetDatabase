@@ -488,7 +488,7 @@ async function joinTableAddQuery() {
     attributes.classList.add('attributes');
     attributes.innerHTML = `<option value="o.oaddress">Owner Address</option>
                     <option value="o.oname">Owner Name</option>
-                    <option value="o.ocontact">Owner Contact</option>
+                    <option value="o.contact">Owner Contact</option>
                     <option value="a.shelterAddress">Shelter Address on Application</option>
                     <option value="a.ownerAddress">Owner Address on Application</option>
                     <option value="a.id">Application id</option>
