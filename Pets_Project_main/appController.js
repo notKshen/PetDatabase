@@ -126,4 +126,10 @@ router.get("/having-query", async (req, res) => {
     res.json({data: havingResult});
 });
 
+router.get("/divide-query", async (req, res) => {
+    const divideResult = await appService.divideQuery();
+    res.json({data: divideResult});
+});
+
+
 module.exports = router;

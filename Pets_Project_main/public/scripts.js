@@ -636,6 +636,40 @@ async function havingQuery() {
     });
 }
 
+async function divideQuery() {
+    const tableElement = document.getElementById('divideTable');
+    const tableBody = tableElement.querySelector('tbody');
+    
+    const response = await fetch('/divide-query', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const dividetableContent = responseData.data;
+
+    const messageElement = document.getElementById('divideResultMsg');
+
+    messageElement.textContent = "Divide query result:";
+        
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    if (dividetableContent.length == 0) {
+        messageElement.textContent += " No results!";
+        return;
+    }
+
+    dividetableContent.forEach(address => {
+        const row = tableBody.insertRow();
+        address.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.

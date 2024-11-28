@@ -457,6 +457,28 @@ async function havingQuery() {
     });
 }
 
+async function divideQuery() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT Shelter.saddress
+            FROM Shelter
+            WHERE NOT EXISTS (
+                (SELECT Supplier1.saddress
+                 FROM Supplier1)
+                MINUS
+                (SELECT PurchasesFrom.supplierAddress
+                 FROM PurchasesFrom
+                 WHERE shelterAddress = Shelter.saddress)
+            )
+            `);
+
+        const rows = result.rows;
+        return rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchPettableFromDb,
@@ -473,5 +495,6 @@ module.exports = {
     updateDemotable, 
     countDemotable,
     getFilteredColumns,
-    fetchSortYoungFromDb
+    fetchSortYoungFromDb,
+    divideQuery
 };
