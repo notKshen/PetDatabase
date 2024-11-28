@@ -244,14 +244,64 @@ async function updateDemotable(field, oldValue, newValue, petID) {
           );
           break;
   
-        case "age":
-          result = await connection.execute(
-            `UPDATE Pet3 SET age = :newValue WHERE age = :oldValue AND pid = :petID`,
-            [Number(newValue), Number(oldValue), petID],
+          case "age":
+            result = await connection.execute(
+              `
+              UPDATE Pet2
+              SET age = :newValue
+              WHERE age = :oldValue 
+              AND age = (
+                  SELECT age
+                  FROM Pet3
+                  WHERE pid = :petID
+              )
+              `,
+              [Number(newValue), Number(oldValue), petID],
+              { autoCommit: true }
+            );
+        
+            await connection.execute(
+              `UPDATE Pet3 
+              SET age = :newValue 
+              WHERE age = :oldValue AND pid = :petID`,
+              [Number(newValue), Number(oldValue), petID],
+              { autoCommit: true }
+            );
+            break;
+        
+        case "dietaryRequirements":
+            result = await connection.execute(
+                `
+                UPDATE Pet2
+                SET dietaryRequirements = :newValue
+                WHERE dietaryRequirements = :oldValue
+                AND species = (
+                    SELECT species
+                    FROM Pet7
+                    WHERE pid = :petID
+                )
+                `,
+                [newValue, oldValue, petID],
+                { autoCommit: true }
+            );
+            
+            await connection.execute(
+                `
+                UPDATE Pet11
+                SET dietaryRequirements = :newValue
+                WHERE dietaryRequirements = :oldValue
+                    AND species = (
+                    SELECT species
+                    FROM Pet7
+                    WHERE pid = :petID
+                )
+                `,
+                [newValue, oldValue, petID],
             { autoCommit: true }
-          );
-          break;
-  
+        );      
+        break;
+            
+
         case "healthCondition":
           result = await connection.execute(
             `UPDATE Pet4 SET healthCondition = :newValue WHERE healthCondition = :oldValue AND pid = :petID`,
@@ -300,6 +350,23 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             result = await connection.execute(
                 // Should be ON UPDATE CASCADE for foreign key
                 `UPDATE Pet10 SET ownerAddress = :newValue WHERE ownerAddress = :oldValue AND pid = :petID`,
+                [newValue, oldValue, petID],
+                { autoCommit: true }
+              );
+          break;
+
+        case "carePlan":
+            result = await connection.execute(
+                `
+                UPDATE Pet11
+                SET carePlan = :newValue
+                WHERE carePlan = :oldValue
+                    AND species = (
+                        SELECT species
+                        FROM Pet7
+                        WHERE pid = :petID
+                        )
+                `,
                 [newValue, oldValue, petID],
                 { autoCommit: true }
               );

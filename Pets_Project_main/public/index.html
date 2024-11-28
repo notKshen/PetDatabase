@@ -26,11 +26,14 @@
                 <th>Name</th>
                 <th>Species</th>
                 <th>Age</th>
+                <th>Dietary Requirements</th>
                 <th>Health Condition</th>
                 <th>Adoption Date</th>
                 <th>Arrive Date</th>
                 <th>Breed</th>
                 <th>Owner Address</th>
+                <th>Care Plan</th>
+                <th>Life Span</th>
             </tr>
         </thead>
         <tbody>
@@ -61,9 +64,11 @@
         <option value="">Select an option</option>
         <option value="name">Name</option>
         <option value="age">Age</option>
+        <option value="dietaryRequirements">Dietary Requirements</option>
         <option value="healthCondition">Health Condition</option>
         <option value="adoptionDate">Adoption Date</option>
         <option value="ownerAddress">Owner Address</option>
+        <option value="carePlan">Care Plan</option>
     </select>
 
     <div id="nameDiv" class="hidden">
@@ -76,6 +81,12 @@
         Pet ID: <input type="number" id="petIDAge" class="form-input" placeholder="Enter Pet ID"> <br><br>
         Old Age: <input type="number" id="oldAgeValue" class="form-input" placeholder="Enter Old Age"> <br><br>
         New Age: <input type="number" id="newAgeValue" class="form-input" placeholder="Enter New Age"> <br><br>
+    </div>
+
+    <div id="dietReqDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDDietReq" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old DietReq: <input type="text" id="oldDietReqValue" class="form-input" placeholder="Enter Old DietReq"> <br><br>
+        New DietReq: <input type="text" id="newDietReqValue" class="form-input" placeholder="Enter New DietReq"> <br><br>
     </div>
 
     <div id="healthConditionDiv" class="hidden">
@@ -94,6 +105,12 @@
         Pet ID: <input type="number" id="petIDOA" class="form-input" placeholder="Enter Pet ID"> <br><br>
         Old Address: <input type="text" id="oldOwnerAddressValue" class="form-input" placeholder="Enter Old Address"> <br><br>
         New Address: <input type="text" id="newOwnerAddressValue" class="form-input" placeholder="Enter New Address"> <br><br>
+    </div>
+
+    <div id="carePlanDiv" class="hidden">
+        Pet ID: <input type="number" id="petIDCarePlan" class="form-input" placeholder="Enter Pet ID"> <br><br>
+        Old Care Plan: <input type="text" id="oldCarePlanValue" class="form-input" placeholder="Enter Old Care Plan"> <br><br>
+        New Care Plan: <input type="text" id="newCarePlanValue" class="form-input" placeholder="Enter New Care Plan" maxlength="30"> <br><br>
     </div>
 
     <button type="submit">Update</button>
@@ -210,9 +227,9 @@
     <table id="dogTable" border="1 px">
         <thead>
             <tr>
-                <th>PetId</th>
-                <th>Coat Type</th>
-                <th>Barking Frequency</th>
+                <th>pid</th>
+                <th>coatType</th>
+                <th>barkingFrequency</th>
             </tr>
         </thead>
         <tbody>
