@@ -108,6 +108,7 @@ create table Pet2 (
 	primary key (species, age)
 );
 grant select on Pet2 to public;
+grant update on Pet2 to public;
 
 create table Pet3 (
 	pid	integer	primary key,
@@ -136,6 +137,7 @@ create table Pet6 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet6 to public;
+grant update on Pet6 to public;
 
 create table Pet7 (
 	pid			integer	primary key,
@@ -143,6 +145,7 @@ create table Pet7 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet7 to public;
+grant update on Pet7 to public;
 
 create table Pet8 (
 	species			varchar (30),
@@ -151,6 +154,7 @@ create table Pet8 (
 	primary key (species, breed)
 );
 grant select on Pet8 to public;
+grant update on Pet8 to public;
 
 create table Pet9 (
 	pid			integer	primary key,
@@ -158,6 +162,7 @@ create table Pet9 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet9 to public;
+grant update on Pet9 to public;
 
 create table Pet10 (
 	pid			integer	primary key,
@@ -175,8 +180,7 @@ create table Pet11 (
 	primary key (species, dietaryRequirements, healthCondition)
 );
 grant select on Pet11 to public;
-
-
+grant update on Pet11 to public;
 
 create table AdoptionApplication (
 	shelterAddress	varchar	(50) NOT NULL,
