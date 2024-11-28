@@ -34,7 +34,7 @@
         </thead>
         <tbody>
         </tbody>
-    </table> -->
+    </table> 
 
     <button onclick="sortYoung()" class="sortButton">Sort Young Pets</button>
     <table id="youngTable" class ="hidden" border="1 px">
@@ -117,6 +117,22 @@
         <tbody>
         </tbody>
     </table>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> 2.1.1 Insert Values into DocumentationTable (make sure Pet ID and Vet Contact already exist)</h2>
+    <form id="insertDocTable">
+        Pets ID: <input type="number" id="insertPID" placeholder="Enter Pet ID" required> <br><br>
+        Veterinarian Contact: <input type="text" id="insertVetCon" placeholder="Enter vet phone number (e.g. XXX-XXX-XXXX)" maxlength="12" required> <br><br>
+        ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
+        Description: <input type="text" id="insertDesc" placeholder="Enter document description"> <br><br>
+        Date: <input type="date" id="insertDate" placeholder="Enter document date"> <br><br>
+
+        <button type="submit"> insert </button> <br>
+    </form>
+    <div id="insertResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
 
     <h2>Show VeterinarianTable</h2>
     <table id="vetTable" border="1 px">
@@ -220,22 +236,6 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> Insert Values into PetTable </h2>
-    <form id="insertPetTable">
-        ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
-        Name: <input type="text" id="insertName" placeholder="Enter Name" maxlength="20"> <br><br>
-        <button type="submit"> insert </button> <br>
-    </form>
-    <div id="insertResultMsg"></div>
-
-
-    <h2>Count the Tuples in PetTable</h2>
-    <button id="countPetTable"> count </button> <br><br>
-    <!-- A placeholder to display the count result. -->
-    <div id="countResultMsg"></div> <br>
-
-    <br><hr><br> <!-- ========================================================================= -->
-
     <h2> 2.1.6 Join Values on PetOwnerTable and AdoptionApplicationTable</h2>
     <div>If entering a date, please write in "YYYY-MM-DD" format.</div> <br> <br>
     <form id="joinTableInput">
@@ -289,6 +289,8 @@
         </tbody>
     </table>
 
+    <br><hr><br>
+
     <h2> 2.1.8 Aggregation with HAVING - For all pets, find the average ages of pet breeds greater than 5</h2>
 
     <button type="button" onclick="havingQuery()">Show</button> <br> <br>
@@ -298,6 +300,22 @@
             <tr>
                 <th>Pet Species</th>
                 <th>Average Age</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <br><hr><br>
+
+    <h2> 2.1.10 Division - Find the Shelters that have Purchases from every supplier</h2>
+
+    <button type="button" onclick="divideQuery()">Show</button> <br> <br>
+    <div id="divideResultMsg"></div>
+    <table id="divideTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Shelter Address</th>
             </tr>
         </thead>
         <tbody>

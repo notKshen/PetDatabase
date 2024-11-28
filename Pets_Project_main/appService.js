@@ -218,11 +218,11 @@ async function fetchSortYoungFromDb() {
 }
 
 
-async function insertDemotable(id, name) {
+async function insertDoctable(pid, vetcon, id, ddesc, ddate) {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `INSERT INTO Pet1 (pid, pname) VALUES (:id, :name)`,
-            [id, name],
+            `INSERT INTO Documentation (pid, veterinarianContact, id, ddescription, ddate) VALUES (:pid, :vetcon, :id, :ddesc, TO_DATE (:ddate, 'YYYY-MM-DD'))`,
+            [pid, vetcon, id, ddesc, ddate],
             { autoCommit: true }
         );
 
@@ -390,6 +390,28 @@ async function havingQuery() {
     });
 }
 
+async function divideQuery() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT Shelter.saddress
+            FROM Shelter
+            WHERE NOT EXISTS (
+                (SELECT Supplier1.saddress
+                 FROM Supplier1)
+                MINUS
+                (SELECT PurchasesFrom.supplierAddress
+                 FROM PurchasesFrom
+                 WHERE shelterAddress = Shelter.saddress)
+            )
+            `);
+
+        const rows = result.rows;
+        return rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     testOracleConnection,
     fetchPettableFromDb,
@@ -402,9 +424,10 @@ module.exports = {
     fetchDogtableFromDb,
     joinTable,
     havingQuery,
-    insertDemotable, 
+    insertDoctable, 
     updateDemotable, 
     countDemotable,
     getFilteredColumns,
-    fetchSortYoungFromDb
+    fetchSortYoungFromDb,
+    divideQuery
 };

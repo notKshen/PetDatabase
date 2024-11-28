@@ -58,17 +58,15 @@ router.get('/dogtable', async (req, res) => {
 });
 
 
-
-
 ////
 router.get('/sortYoungPet', async (req, res) => {
     const tableContent = await appService.fetchSortYoungFromDb();
     res.json({data: tableContent});
 });
 
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
+router.post("/insert-doctable", async (req, res) => {
+    const { pid, vetcon, id, ddesc, ddate } = req.body;
+    const insertResult = await appService.insertDoctable(pid, vetcon, id, ddesc, ddate);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -113,8 +111,6 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
-
-
 router.post("/join-table", async (req, res) => {
     const { query } = req.body;
     const joinResult = await appService.joinTable(query);
@@ -129,5 +125,11 @@ router.get("/having-query", async (req, res) => {
     const havingResult = await appService.havingQuery();
     res.json({data: havingResult});
 });
+
+router.get("/divide-query", async (req, res) => {
+    const divideResult = await appService.divideQuery();
+    res.json({data: divideResult});
+});
+
 
 module.exports = router;
