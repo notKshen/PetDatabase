@@ -284,16 +284,22 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             break;
         
         case "dietaryRequirements":
+            if(oldValue == '' || newValue == '') return false;
             result = await connection.execute(
                 `
                 UPDATE Pet2
                 SET dietaryRequirements = :newValue
                 WHERE dietaryRequirements = :oldValue
-                AND species = (
-                    SELECT species
-                    FROM Pet7
-                    WHERE pid = :petID
-                )
+                  AND species = (
+                      SELECT species
+                      FROM Pet7
+                      WHERE pid = :petID
+                  )
+                  AND age = (
+                      SELECT age
+                      FROM Pet3
+                      WHERE pid = :petID
+                  )
                 `,
                 [newValue, oldValue, petID],
                 { autoCommit: true }
@@ -304,7 +310,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
                 UPDATE Pet11
                 SET dietaryRequirements = :newValue
                 WHERE dietaryRequirements = :oldValue
-                    AND species = (
+                AND species = (
                     SELECT species
                     FROM Pet7
                     WHERE pid = :petID
