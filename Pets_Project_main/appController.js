@@ -52,6 +52,12 @@ router.get('/purchasesfromtable', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/suppliertable', async (req, res) => {
+    const tableContent = await appService.fetchSuppliertableFromDb();
+    res.json({data: tableContent});
+});
+
+
 router.get('/dogtable', async (req, res) => {
     const tableContent = await appService.fetchDogtableFromDb();
     res.json({data: tableContent});

@@ -182,6 +182,26 @@ async function fetchPurchasesFromtableFromDb() {
     });
 }
 
+async function fetchSuppliertableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT 
+                Supplier1.saddress,
+                Supplier1.contact,
+                Supplier2.industry,
+                Supplier2.supplyType
+            FROM 
+                Supplier1, Supplier2, Supplier3
+            WHERE 
+                Supplier1.saddress = Supplier3.saddress
+                AND Supplier2.industry = Supplier3.industry
+        `);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchDogtableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Dog');
@@ -283,45 +303,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             );
             break;
         
-        case "dietaryRequirements":
-            if(oldValue == '' || newValue == '') return false;
-            result = await connection.execute(
-                `
-                UPDATE Pet2
-                SET dietaryRequirements = :newValue
-                WHERE dietaryRequirements = :oldValue
-                  AND species = (
-                      SELECT species
-                      FROM Pet7
-                      WHERE pid = :petID
-                  )
-                  AND age = (
-                      SELECT age
-                      FROM Pet3
-                      WHERE pid = :petID
-                  )
-                `,
-                [newValue, oldValue, petID],
-                { autoCommit: true }
-            );
-            
-            await connection.execute(
-                `
-                UPDATE Pet11
-                SET dietaryRequirements = :newValue
-                WHERE dietaryRequirements = :oldValue
-                AND species = (
-                    SELECT species
-                    FROM Pet7
-                    WHERE pid = :petID
-                )
-                `,
-                [newValue, oldValue, petID],
-            { autoCommit: true }
-        );      
-        break;
-            
-
+        
         case "healthCondition":
             if(oldValue == '' || newValue == '') return false;
           result = await connection.execute(
@@ -391,25 +373,6 @@ async function updateDemotable(field, oldValue, newValue, petID) {
                 { autoCommit: true }
               );
           break;
-
-        case "carePlan":
-            if(oldValue == '' || newValue == '') return false;
-            result = await connection.execute(
-                `
-                UPDATE Pet11
-                SET carePlan = :newValue
-                WHERE carePlan = :oldValue
-                    AND species = (
-                        SELECT species
-                        FROM Pet7
-                        WHERE pid = :petID
-                        )
-                `,
-                [newValue, oldValue, petID],
-                { autoCommit: true }
-              );
-          break;
-  
         default:
       }
   
@@ -620,6 +583,7 @@ module.exports = {
     fetchApplicationtableFromDb,
     fetchSheltertableFromDb,
     fetchPurchasesFromtableFromDb,
+    fetchSuppliertableFromDb,
     fetchDogtableFromDb,
     fetchTrainertableFromDb,
     fetchSelectedPettableFromDb,
