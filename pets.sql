@@ -45,8 +45,8 @@ grant select on Trainer2 to public;
 create table Trainer3 (
 	contact	varchar	(12) primary key,
 	certification	varchar (50),
-	foreign key (contact) references Trainer1,	
-	foreign key (certification) references Trainer2
+	foreign key (contact) references Trainer1 ON DELETE CASCADE,	
+	foreign key (certification) references Trainer2 ON DELETE CASCADE
 ); 
 grant select on Trainer3 to public;
 
@@ -527,12 +527,9 @@ insert into PurchasesFrom values ('13 Watford St', '54 Robson St');
 insert into PurchasesFrom values ('13 Watford St', '74 Granville St');
 insert into PurchasesFrom values ('13 Watford St', '76 Nanaimo St'); 
 insert into PurchasesFrom values ('13 Watford St', '16 Main St'); 
-insert into PurchasesFrom values ('13 Watford St', '999 All St'); 
 insert into PurchasesFrom values ('164 Alma St', '100 Fraser St'); 
 insert into PurchasesFrom values ('164 Alma St', '74 Granville St');
 insert into PurchasesFrom values ('164 Alma St', '76 Nanaimo St'); 
-insert into PurchasesFrom values ('164 Alma St', '16 Main St'); 
-insert into PurchasesFrom values ('164 Alma St', '999 All St'); 
 
 insert into Trains values ('778-111-1111', 1);
 insert into Trains values ('778-111-1112', 2);
