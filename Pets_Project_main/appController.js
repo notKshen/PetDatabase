@@ -61,7 +61,16 @@ router.get('/dogtable', async (req, res) => {
 ////
 router.get('/sortYoungPet', async (req, res) => {
     const tableContent = await appService.fetchSortYoungFromDb();
-    res.json({data: tableContent});
+    if (tableContent.length > 0) {
+        res.json({
+            success: true,
+            data: tableContent
+        });
+    } else {
+        res.status(500).json({
+            success: false
+        });
+    }
 });
 
 router.post("/insert-doctable", async (req, res) => {
@@ -76,11 +85,10 @@ router.post("/insert-doctable", async (req, res) => {
 
 router.post('/filter-columns', async (req, res) => {
     const { columns } = req.body;
-    try {
-        const filteredData = await appService.getFilteredColumns(columns);
+    const filteredData = await appService.getFilteredColumns(columns);
+    if(filteredData) {
         res.json({ success: true, data: filteredData });
-    } catch (error) {
-        console.error('Error filtering columns:', error);
+    } else {
         res.status(500).json({ success: false });
     }
 });

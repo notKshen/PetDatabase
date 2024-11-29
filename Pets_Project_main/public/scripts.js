@@ -434,32 +434,28 @@ async function sortYoung() {
     const tableElement = document.getElementById('youngTable');
     const tableBody = tableElement.querySelector('tbody');
 
-    if (!tableElement.classList.contains('hidden')) {
-        tableElement.classList.add('hidden');
-        return; 
-    }
-
     const response = await fetch('/sortYoungPet', {
         method: 'GET'
     });
 
     const responseData = await response.json();
     const pettableContent = responseData.data;
-
-    if (tableBody) {
-        tableBody.innerHTML = '';
-    }
-
-    pettableContent.forEach(pet => {
-        const row = tableBody.insertRow();
-        pet.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = field;
-        });
-    });
-    tableElement.classList.remove('hidden');
     const resultMsg = document.getElementById("updateMsg");
-    resultMsg.textContent = 'Displaying animals of each species whose ages are below or equal to the average age of that species.';
+    if (responseData.success) {
+        if (tableBody) {
+            tableBody.innerHTML = '';
+        }
+        pettableContent.forEach(pet => {
+            const row = tableBody.insertRow();
+            pet.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+        resultMsg.textContent = 'Displaying animals of each species whose ages are below or equal to the average age of that species.';
+    } else {
+        resultMsg.textContent = "Error in getting age!";
+    }
 }
 
 
@@ -486,30 +482,36 @@ async function applyFilter() {
 
     const responseData = await response.json();
     const dogTableContent = responseData.data;
-    // Always clear old, already fetched data before the new fetching process
-    if (tableBody) {
-        tableBody.innerHTML = '';
-    }
-
-    // Dynamically create table headers
-    const tableHead = document.getElementById('dogTable').querySelector('thead');
-    if (tableHead) {
-        tableHead.innerHTML = ''; // Clear old headers
-        const headerRow = tableHead.insertRow();
-        selectedColumns.forEach((col) => {
-            const th = document.createElement('th');
-            th.textContent = col;
-            headerRow.appendChild(th);
+    const message = document.getElementById('dogUpdateMsg');
+    if (responseData.success) {
+        if (tableBody) {
+            tableBody.innerHTML = '';
+        }
+    
+        // Dynamically create table headers
+        const tableHead = document.getElementById('dogTable').querySelector('thead');
+        if (tableHead) {
+            tableHead.innerHTML = ''; // Clear old headers
+            const headerRow = tableHead.insertRow();
+            selectedColumns.forEach((col) => {
+                const th = document.createElement('th');
+                th.textContent = col;
+                headerRow.appendChild(th);
+            });
+        }
+    
+        dogTableContent.forEach(dog => {
+            const row = tableBody.insertRow();
+            dog.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
         });
+        message.textContent = "Successfully filtered table!"
+    } else {
+        message.textContent = "Error in filtering table!";
     }
-
-    dogTableContent.forEach(dog => {
-        const row = tableBody.insertRow();
-        dog.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = field;
-        });
-    });
+    
     document.getElementById('filterContainer').style.display = 'none';
 }
 

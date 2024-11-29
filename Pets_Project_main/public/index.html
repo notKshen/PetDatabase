@@ -191,7 +191,8 @@
 
     <h2>2.1.9 Nested Aggregation with GROUP BY - Find animals whose age <= average age of its species </h2>
     <button onclick="sortYoung()" class="sortButton">Sort Young Pets</button>
-    <table id="youngTable" class ="hidden" border="1 px">
+    <div id="updateMsg"></div>
+    <table id="youngTable" border="1 px">
         <thead>
             <tr>
                 <th>ID</th>
@@ -203,8 +204,6 @@
         </tbody>
     </table>
   
-    <div id="updateMsg"></div>
-
     <br><hr><br> <!-- ========================================================================= -->
     <h2>Additional Selection/Join - Selection On PetTable</h2>
     <table id="selectedPetTable" border="1 px">
@@ -399,6 +398,7 @@
         <button type="button" onclick="applyFilter()">Apply Filter</button>
     </div>
     <table id="dogTable" border="1 px">
+        <div id="dogUpdateMsg"></div>
         <thead>
             <tr>
                 <th>pid</th>

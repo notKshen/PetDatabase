@@ -238,9 +238,8 @@ async function getFilteredColumns(columns) {
       const query = `SELECT ${selectedColumns} FROM Dog`;
       const result = await connection.execute(query);
       return result.rows;
-    }).catch((err) => {
-      console.error('Error during column filtering:', err);
-      throw err;
+    }).catch(() => {
+      return false;
     });
   }
 
@@ -250,6 +249,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
   
       switch (field) {
         case "name":
+            if(oldValue == '' || newValue == '') return false;
           result = await connection.execute(
             `UPDATE Pet1 SET pname = :newValue WHERE pname = :oldValue AND pid = :petID`,
             [newValue, oldValue, petID],
@@ -258,6 +258,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
           break;
   
           case "age":
+            if(oldValue == '' || newValue == '') return false;
             result = await connection.execute(
               `
               UPDATE Pet2
@@ -316,11 +317,27 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             
 
         case "healthCondition":
+            if(oldValue == '' || newValue == '') return false;
           result = await connection.execute(
             `UPDATE Pet4 SET healthCondition = :newValue WHERE healthCondition = :oldValue AND pid = :petID`,
             [newValue, oldValue, petID],
             { autoCommit: true }
           );
+
+          await connection.execute(
+            `
+            UPDATE Pet11
+            SET healthCondition = :newValue
+            WHERE healthCondition = :oldValue
+                AND species = (
+                SELECT species
+                FROM Pet7
+                WHERE pid = :petID
+            )
+            `,
+            [newValue, oldValue, petID],
+        { autoCommit: true }
+    );      
           break;
   
           case "adoptionDate": 
@@ -360,6 +377,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             break;
   
         case "ownerAddress":
+            if(oldValue == '' || newValue == '') return false;
             result = await connection.execute(
                 // Should be ON UPDATE CASCADE for foreign key
                 `UPDATE Pet10 SET ownerAddress = :newValue WHERE ownerAddress = :oldValue AND pid = :petID`,
@@ -369,6 +387,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
           break;
 
         case "carePlan":
+            if(oldValue == '' || newValue == '') return false;
             result = await connection.execute(
                 `
                 UPDATE Pet11
@@ -386,13 +405,11 @@ async function updateDemotable(field, oldValue, newValue, petID) {
           break;
   
         default:
-          throw new Error(`Unknown field: ${field}`);
       }
   
       // Return true if rows were updated
       return result.rowsAffected && result.rowsAffected > 0;
-    }).catch((err) => {
-      console.error("Error during update:", err);
+    }).catch(() => {
       return false;
     });
   }
