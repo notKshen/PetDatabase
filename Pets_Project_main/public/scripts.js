@@ -551,26 +551,20 @@ function showUpdateFields() {
 
     document.getElementById("nameDiv").classList.add("hidden");
     document.getElementById("ageDiv").classList.add("hidden");
-    document.getElementById("dietReqDiv").classList.add("hidden");
     document.getElementById("healthConditionDiv").classList.add("hidden");
     document.getElementById("adoptionDateDiv").classList.add("hidden");
     document.getElementById("ownerAddressDiv").classList.add("hidden");
-    document.getElementById("carePlanDiv").classList.add("hidden");
 
     if (selectValue === "name") {
         document.getElementById("nameDiv").classList.remove("hidden");
     } else if (selectValue === "age") {
         document.getElementById("ageDiv").classList.remove("hidden");
-    } else if (selectValue === "dietaryRequirements") {
-        document.getElementById("dietReqDiv").classList.remove("hidden");
     } else if (selectValue === "healthCondition") {
         document.getElementById("healthConditionDiv").classList.remove("hidden");
     } else if (selectValue === "adoptionDate") {
         document.getElementById("adoptionDateDiv").classList.remove("hidden");
     } else if (selectValue === "ownerAddress") {
         document.getElementById("ownerAddressDiv").classList.remove("hidden");
-    } else if (selectValue === "carePlan") {
-        document.getElementById("carePlanDiv").classList.remove("hidden");
     }
 }
 
@@ -589,11 +583,6 @@ async function updateDemotable(event) {
         oldValue = document.getElementById("oldAgeValue").value;
         newValue = document.getElementById("newAgeValue").value;
         break;
-    case "dietaryRequirements":
-        petID = document.getElementById("petIDDietReq").value;
-        oldValue = document.getElementById("oldDietReqValue").value;
-        newValue = document.getElementById("newDietReqValue").value;
-        break;
     case "healthCondition":
         petID = document.getElementById("petIDHC").value;
         oldValue = document.getElementById("oldHealthConditionValue").value;
@@ -608,11 +597,6 @@ async function updateDemotable(event) {
         petID = document.getElementById("petIDOA").value;
         oldValue = document.getElementById("oldOwnerAddressValue").value;
         newValue = document.getElementById("newOwnerAddressValue").value;
-        break;
-    case "carePlan":
-        petID = document.getElementById("petIDCarePlan").value;
-        oldValue = document.getElementById("oldCarePlanValue").value;
-        newValue = document.getElementById("newCarePlanValue").value;
         break;
     default:
         alert("Please select a valid field to update.");

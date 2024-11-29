@@ -303,45 +303,7 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             );
             break;
         
-        case "dietaryRequirements":
-            if(oldValue == '' || newValue == '') return false;
-            result = await connection.execute(
-                `
-                UPDATE Pet2
-                SET dietaryRequirements = :newValue
-                WHERE dietaryRequirements = :oldValue
-                  AND species = (
-                      SELECT species
-                      FROM Pet7
-                      WHERE pid = :petID
-                  )
-                  AND age = (
-                      SELECT age
-                      FROM Pet3
-                      WHERE pid = :petID
-                  )
-                `,
-                [newValue, oldValue, petID],
-                { autoCommit: true }
-            );
-            
-            await connection.execute(
-                `
-                UPDATE Pet11
-                SET dietaryRequirements = :newValue
-                WHERE dietaryRequirements = :oldValue
-                AND species = (
-                    SELECT species
-                    FROM Pet7
-                    WHERE pid = :petID
-                )
-                `,
-                [newValue, oldValue, petID],
-            { autoCommit: true }
-        );      
-        break;
-            
-
+        
         case "healthCondition":
             if(oldValue == '' || newValue == '') return false;
           result = await connection.execute(
@@ -411,25 +373,6 @@ async function updateDemotable(field, oldValue, newValue, petID) {
                 { autoCommit: true }
               );
           break;
-
-        case "carePlan":
-            if(oldValue == '' || newValue == '') return false;
-            result = await connection.execute(
-                `
-                UPDATE Pet11
-                SET carePlan = :newValue
-                WHERE carePlan = :oldValue
-                    AND species = (
-                        SELECT species
-                        FROM Pet7
-                        WHERE pid = :petID
-                        )
-                `,
-                [newValue, oldValue, petID],
-                { autoCommit: true }
-              );
-          break;
-  
         default:
       }
   
