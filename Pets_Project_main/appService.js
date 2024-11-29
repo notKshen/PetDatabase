@@ -182,6 +182,26 @@ async function fetchPurchasesFromtableFromDb() {
     });
 }
 
+async function fetchSuppliertableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT 
+                Supplier1.saddress,
+                Supplier1.contact,
+                Supplier2.industry,
+                Supplier2.supplyType
+            FROM 
+                Supplier1, Supplier2, Supplier3
+            WHERE 
+                Supplier1.saddress = Supplier3.saddress
+                AND Supplier2.industry = Supplier3.industry
+        `);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchDogtableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Dog');
@@ -479,6 +499,115 @@ async function divideQuery() {
     });
 }
 
+
+
+async function fetchTrainertableFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT 
+                T1.contact, T1.tname, T3.certification, T2.specialty
+            FROM Trainer1 T1, Trainer2 T2, Trainer3 T3
+            WHERE T1.contact = T3.contact
+              AND T2.certification = T3.certification
+        `);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchSelectedPettableFromDb(queryString) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT 
+                Pet1.pid,
+                Pet1.pname,
+                Pet2.species,
+                Pet2.age,
+                Pet2.dietaryRequirements,
+                Pet4.healthCondition,
+                Pet5.adoptionDate,
+                Pet6.arriveDate,
+                Pet8.breed,
+                Pet10.ownerAddress,
+                Pet11.carePlan,
+                Pet8.lifespan
+            FROM 
+                Pet1, Pet2, Pet3, Pet4, Pet5, Pet6, Pet7, Pet8, Pet9, Pet10, Pet11
+            WHERE 
+                Pet1.pid = Pet3.pid
+                AND Pet1.pid = Pet4.pid
+                AND Pet1.pid = Pet5.pid
+                AND Pet1.pid = Pet6.pid
+                AND Pet1.pid = Pet7.pid
+                AND Pet1.pid = Pet9.pid
+                AND Pet1.pid = Pet10.pid
+                AND Pet2.species = Pet7.species
+                AND Pet2.age = Pet3.age
+                AND Pet8.species = Pet7.species
+                AND Pet8.breed = Pet9.breed
+                AND Pet11.species = Pet7.species
+                AND Pet11.dietaryRequirements = Pet2.dietaryRequirements
+                AND Pet11.healthCondition = Pet4.healthCondition
+                ${queryString}`
+        );
+        const rows = result.rows;
+
+        rows.forEach((row, rowIndex) => {
+            row.forEach((field, index) => {
+                if (field instanceof Date) {
+                    row[index] = field.toISOString().split('T')[0];
+                }
+            });
+        });
+
+        return rows;
+    }).catch(() => {
+        return null;
+    });
+}
+
+async function fetchSelectedSheltertableFromDb(queryString) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT *
+            FROM Shelter
+            ${queryString}`
+        );
+        return result.rows;
+    }).catch(() => {
+        return null;
+    });
+}
+
+async function deleteTrainer(trainerContact) {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `DELETE FROM Trainer1 WHERE contact=:trainerContact`,
+            [trainerContact],
+            { autoCommit: true }
+        );
+        return result.rowsAffected && result.rowsAffected > 0;
+    }).catch(() => {
+        return false;
+    });
+}
+
+async function avgAgeGroupBySpecies() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute(`
+            SELECT P7.species, AVG(P3.age)
+            FROM Pet7 P7, Pet3 P3
+            WHERE P3.pid = P7.pid
+            GROUP BY P7.species
+        `);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+
 module.exports = {
     testOracleConnection,
     fetchPettableFromDb,
@@ -488,7 +617,11 @@ module.exports = {
     fetchApplicationtableFromDb,
     fetchSheltertableFromDb,
     fetchPurchasesFromtableFromDb,
+    fetchSuppliertableFromDb,
     fetchDogtableFromDb,
+    fetchTrainertableFromDb,
+    fetchSelectedPettableFromDb,
+    fetchSelectedSheltertableFromDb,
     joinTable,
     havingQuery,
     insertDoctable, 
@@ -496,5 +629,7 @@ module.exports = {
     countDemotable,
     getFilteredColumns,
     fetchSortYoungFromDb,
-    divideQuery
+    divideQuery,
+    deleteTrainer,
+    avgAgeGroupBySpecies
 };
