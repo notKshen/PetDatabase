@@ -247,6 +247,31 @@ async function fetchAndDisplayPurchasesFrom() {
     });
 }
 
+async function fetchAndDisplaySupplier() {
+    const tableElement = document.getElementById('supplierTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/suppliertable', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const supplierTableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    supplierTableContent.forEach(supplier => {
+        const row = tableBody.insertRow();
+        supplier.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 async function fetchAndDisplayDogs() {
     const tableElement = document.getElementById('dogTable');
     const tableBody = tableElement.querySelector('tbody');
@@ -1059,6 +1084,7 @@ function fetchTableData() {
     fetchAndDisplayApplications();
     fetchAndDisplayShelters();
     fetchAndDisplayPurchasesFrom();
+    fetchAndDisplaySupplier();
     fetchAndDisplayDogs();
     fetchAndDisplayTrainers();
     fetchAndDisplayTrainerContacts();
