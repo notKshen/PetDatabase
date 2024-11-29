@@ -46,7 +46,7 @@ create table Trainer3 (
 	contact	varchar	(12) primary key,
 	certification	varchar (50),
 	foreign key (contact) references Trainer1 ON DELETE CASCADE,	
-	foreign key (certification) references Trainer2 ON DELETE CASCADE
+	foreign key (certification) references Trainer2
 ); 
 grant select on Trainer3 to public;
 
@@ -502,6 +502,7 @@ insert into Dog	values (3, 'Long', 10);
 insert into Dog	values (6, 'Short-Coated', 5); 
 insert into Dog	values (7, 'Curly-Coated', 6);
 insert into Dog	values (8, 'Fluffy', 8);
+insert into Dog	values (12, 'Medium-Coated', 7);
 
 insert into Cat	values (4, 'Bristly', 20);
 insert into Cat	values (5, 'Hairless', 18);
