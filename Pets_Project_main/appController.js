@@ -58,16 +58,24 @@ router.get('/dogtable', async (req, res) => {
 });
 
 
-
 ////
 router.get('/sortYoungPet', async (req, res) => {
     const tableContent = await appService.fetchSortYoungFromDb();
-    res.json({data: tableContent});
+    if (tableContent.length > 0) {
+        res.json({
+            success: true,
+            data: tableContent
+        });
+    } else {
+        res.status(500).json({
+            success: false
+        });
+    }
 });
 
-router.post("/insert-demotable", async (req, res) => {
-    const { id, name } = req.body;
-    const insertResult = await appService.insertDemotable(id, name);
+router.post("/insert-doctable", async (req, res) => {
+    const { pid, vetcon, id, ddesc, ddate } = req.body;
+    const insertResult = await appService.insertDoctable(pid, vetcon, id, ddesc, ddate);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -77,11 +85,10 @@ router.post("/insert-demotable", async (req, res) => {
 
 router.post('/filter-columns', async (req, res) => {
     const { columns } = req.body;
-    try {
-        const filteredData = await appService.getFilteredColumns(columns);
+    const filteredData = await appService.getFilteredColumns(columns);
+    if(filteredData) {
         res.json({ success: true, data: filteredData });
-    } catch (error) {
-        console.error('Error filtering columns:', error);
+    } else {
         res.status(500).json({ success: false });
     }
 });
@@ -112,8 +119,6 @@ router.get('/count-demotable', async (req, res) => {
     }
 });
 
-
-
 router.post("/join-table", async (req, res) => {
     const { query } = req.body;
     const joinResult = await appService.joinTable(query);
@@ -123,5 +128,70 @@ router.post("/join-table", async (req, res) => {
         res.status(500).json({ success: false });
     }
 });
+
+router.get("/having-query", async (req, res) => {
+    const havingResult = await appService.havingQuery();
+    res.json({data: havingResult});
+});
+
+router.get("/divide-query", async (req, res) => {
+    const divideResult = await appService.divideQuery();
+    res.json({data: divideResult});
+});
+
+////
+
+
+router.get('/trainertable', async (req, res) => {
+    const tableContent = await appService.fetchTrainertableFromDb();
+    res.json({ data: tableContent });
+});
+
+router.post('/selectedpettable', async (req, res) => {
+    const { queryString } = req.body;
+    const tableContent = await appService.fetchSelectedPettableFromDb(queryString);
+    // how to determine whether it succeeds
+    if (tableContent != null) {
+        res.json({ success: true, data: tableContent });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/selectedsheltertable', async (req, res) => {
+    const { queryString } = req.body;
+    const tableContent = await appService.fetchSelectedSheltertableFromDb(queryString);
+    if (tableContent != null) {
+        res.json({ success: true, data: tableContent });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.delete('/delete-trainer', async (req, res) => {
+    const { trainerContact } = req.body;
+    const deleteResult = await appService.deleteTrainer(trainerContact);
+
+    if (deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/avg-age-group-by-species', async (req, res) => {
+    const tableContent = await appService.avgAgeGroupBySpecies();
+    if (tableContent.length > 0) {
+        res.json({
+            success: true,
+            data: tableContent
+        });
+    } else {
+        res.status(500).json({
+            success: false
+        });
+    }
+});
+
 
 module.exports = router;
