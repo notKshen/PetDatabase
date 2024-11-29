@@ -45,7 +45,7 @@ grant select on Trainer2 to public;
 create table Trainer3 (
 	contact	varchar	(12) primary key,
 	certification	varchar (50),
-	foreign key (contact) references Trainer1,	
+	foreign key (contact) references Trainer1 ON DELETE CASCADE,	
 	foreign key (certification) references Trainer2
 ); 
 grant select on Trainer3 to public;
@@ -123,6 +123,7 @@ create table Pet4 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet4 to public;
+grant update on Pet4 to public;
 
 create table Pet5 (
 	pid			integer	primary key,
@@ -236,7 +237,7 @@ create table Trains (
 	trainerContact		varchar (12),
 	pid					integer,
 	primary key (trainerContact, pid),
-	foreign key (TrainerContact) references Trainer1,
+	foreign key (TrainerContact) references Trainer1 ON DELETE CASCADE,
 	foreign key (pid) references Pet1
 );
 grant select on Trains to public;
@@ -263,7 +264,7 @@ create table TrainWorksWithShel (
 	trainerContact		varchar (12), 
 	shelterAddress		varchar (50),
 	primary key (trainerContact, shelterAddress),
-	foreign key (trainerContact) references Trainer1,
+	foreign key (trainerContact) references Trainer1 ON DELETE CASCADE,
 	foreign key (shelterAddress) references Shelter
 );
 grant select on TrainWorksWithShel to public;
@@ -502,6 +503,7 @@ insert into Dog	values (3, 'Long', 10);
 insert into Dog	values (6, 'Short-Coated', 5); 
 insert into Dog	values (7, 'Curly-Coated', 6);
 insert into Dog	values (8, 'Fluffy', 8);
+insert into Dog	values (13, 'Medium-Coated', 7);
 
 insert into Cat	values (4, 'Bristly', 20);
 insert into Cat	values (5, 'Hairless', 18);
@@ -527,12 +529,9 @@ insert into PurchasesFrom values ('13 Watford St', '54 Robson St');
 insert into PurchasesFrom values ('13 Watford St', '74 Granville St');
 insert into PurchasesFrom values ('13 Watford St', '76 Nanaimo St'); 
 insert into PurchasesFrom values ('13 Watford St', '16 Main St'); 
-insert into PurchasesFrom values ('13 Watford St', '999 All St'); 
 insert into PurchasesFrom values ('164 Alma St', '100 Fraser St'); 
 insert into PurchasesFrom values ('164 Alma St', '74 Granville St');
 insert into PurchasesFrom values ('164 Alma St', '76 Nanaimo St'); 
-insert into PurchasesFrom values ('164 Alma St', '16 Main St'); 
-insert into PurchasesFrom values ('164 Alma St', '999 All St'); 
 
 insert into Trains values ('778-111-1111', 1);
 insert into Trains values ('778-111-1112', 2);
