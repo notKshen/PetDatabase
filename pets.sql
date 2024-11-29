@@ -123,6 +123,7 @@ create table Pet4 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet4 to public;
+grant update on Pet4 to public;
 
 create table Pet5 (
 	pid			integer	primary key,
