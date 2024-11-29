@@ -45,7 +45,7 @@ grant select on Trainer2 to public;
 create table Trainer3 (
 	contact	varchar	(12) primary key,
 	certification	varchar (50),
-	foreign key (contact) references Trainer1,	
+	foreign key (contact) references Trainer1 ON DELETE CASCADE,	
 	foreign key (certification) references Trainer2
 ); 
 grant select on Trainer3 to public;
@@ -59,13 +59,12 @@ create table Shelter (
 grant select on Shelter to public;
 
 create table POwner(
-	ownerAddress	varchar	(50) primary key,
-	ownerName	varchar (10),
+	oaddress	varchar	(50) primary key,
+	oname	varchar (10),
 	contact	varchar (12),
 	unique (contact)
 );
 grant select on POwner to public;
-grant update on POwner to public;
 
 create table Veterinarian(
 	contact	varchar	(12) primary key,
@@ -101,7 +100,6 @@ create table Pet1 (
 	pname		varchar (12)
 );
 grant select on Pet1 to public;
-grant update on Pet1 to public;
 
 create table Pet2 (
 	species			varchar (30),
@@ -118,7 +116,6 @@ create table Pet3 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet3 to public;
-grant update on Pet3 to public;
 
 create table Pet4 (
 	pid			integer	primary key,
@@ -134,7 +131,6 @@ create table Pet5 (
 	foreign key (pid) references Pet1
 );
 grant select on Pet5 to public;
-grant update on Pet5 to public;
 
 create table Pet6 (
 	pid			integer	primary key,
@@ -143,7 +139,6 @@ create table Pet6 (
 );
 grant select on Pet6 to public;
 grant update on Pet6 to public;
-
 
 create table Pet7 (
 	pid			integer	primary key,
@@ -177,7 +172,6 @@ create table Pet10 (
 	foreign key (ownerAddress) references POwner
 );
 grant select on Pet10 to public;
-grant update on Pet10 to public;
 
 create table Pet11 (
 	species					varchar (30),
@@ -243,7 +237,7 @@ create table Trains (
 	trainerContact		varchar (12),
 	pid					integer,
 	primary key (trainerContact, pid),
-	foreign key (TrainerContact) references Trainer1,
+	foreign key (TrainerContact) references Trainer1 ON DELETE CASCADE,
 	foreign key (pid) references Pet1
 );
 grant select on Trains to public;
@@ -270,7 +264,7 @@ create table TrainWorksWithShel (
 	trainerContact		varchar (12), 
 	shelterAddress		varchar (50),
 	primary key (trainerContact, shelterAddress),
-	foreign key (trainerContact) references Trainer1,
+	foreign key (trainerContact) references Trainer1 ON DELETE CASCADE,
 	foreign key (shelterAddress) references Shelter
 );
 grant select on TrainWorksWithShel to public;
@@ -307,12 +301,15 @@ insert into Shelter	values ('54 Robson St', 34, '604-333-2322');
 insert into Shelter	values ('74 Granville St', 50, '245-345-6432');
 insert into Shelter	values ('76 Nanaimo St', 45, '246-345-2424');
 insert into Shelter	values ('16 Main St', 80, '778-242-2422');
+insert into Shelter	values ('999 All St', 999, '778-600-6789');
 
 insert into POwner values('1234 Main St', 'John', '778-155-6186');
 insert into POwner values('5678 Fraser St', 'Chris', '778-156-6289');
 insert into POwner values('2198 Dunbar St', 'Sam', '778-769-1875');
 insert into POwner values('1570 Cambie St', 'Mary', '604-178-1785');
 insert into POwner values('3916 Knight St', 'Sarah', '604-333-9617');
+insert into POwner values('2439 Marine Dr', 'Emma', '778-313-5577');
+insert into POwner values('2350 Main St', 'Daniel', '604-991-1211');
 
 insert into Veterinarian values ('111-111-1323', 'Callum', 'Certified Veterinarian Practitioner');
 insert into Veterinarian values	('234-245-2311', 'Dean', 'Certified Veterinarian Practitioner');
@@ -349,18 +346,22 @@ insert into Pet1 values	(8, 'Charlie');
 insert into Pet1 values	(9, 'Lucy'); 
 insert into Pet1 values	(10, 'Betty');
 insert into Pet1 values	(11, 'Tom');
+insert into Pet1 values (12, 'Andy');
+insert into Pet1 values (13, 'Sandy');
 
 insert into Pet2 values ('Turtle', 3, 'Calcium');
 insert into Pet2 values	('Dog', 5, 'Protein');
 insert into Pet2 values	('Dog', 1, 'Fat');
 insert into Pet2 values	('Cat', 7, 'Taurine');
 insert into Pet2 values	('Cat', 10, 'Taurine');
-insert into Pet2 values	('Dog', 6, 'Fat');
-insert into Pet2 values	('Dog', 7, 'Protein');
-insert into Pet2 values	('Dog', 8, 'Fiber');
-insert into Pet2 values	('Cat', 9, 'Fat');
-insert into Pet2 values	('Cat', 2,'Protein');
-insert into Pet2 values	('Cat', 11, 'Calcium');
+insert into Pet2 values	('Dog', 8, 'Protein');
+insert into Pet2 values	('Dog', 9, 'Fiber');
+insert into Pet2 values	('Dog', 10, 'Fat');
+insert into Pet2 values	('Cat', 11, 'Protein');
+insert into Pet2 values	('Cat', 3, 'Calcium');
+insert into Pet2 values	('Cat', 6, 'Fiber');
+insert into Pet2 values	('Dog', 3, 'Protein');
+insert into Pet2 values ('Cat', 2, 'Fiber');
 
 insert into Pet3 values (1, 3); 
 insert into Pet3 values	(2, 5); 
@@ -371,8 +372,10 @@ insert into Pet3 values	(6, 8);
 insert into Pet3 values	(7, 9);
 insert into Pet3 values	(8, 10); 
 insert into Pet3 values	(9, 11);
-insert into Pet3 values	(10,7);
+insert into Pet3 values	(10, 3);
 insert into Pet3 values	(11, 6);
+insert into Pet3 values (12, 7);
+insert into Pet3 values (13, 3);
 
 insert into Pet4 values (1, 'Healthy');
 insert into Pet4 values	(2, 'Diabetes');
@@ -385,6 +388,8 @@ insert into Pet4 values	(8, 'Healthy');
 insert into Pet4 values	(9, 'Healthy');
 insert into Pet4 values	(10, 'Healthy'); 
 insert into Pet4 values	(11, 'Healthy');
+insert into Pet4 values	(12, 'Allergies'); 
+insert into Pet4 values	(13, 'Diabetes');
 
 insert into Pet5 values (1, NULL);
 insert into Pet5 values	(2, TO_DATE ('2023-03-28', 'YYYY-MM-DD')); 
@@ -397,6 +402,8 @@ insert into Pet5 values	(8, NULL);
 insert into Pet5 values	(9, NULL);
 insert into Pet5 values (10, TO_DATE ('2024-10-01', 'YYYY-MM-DD')); 
 insert into Pet5 values	(11, NULL);
+insert into Pet5 values (12, NULL);
+insert into Pet5 values (13, TO_DATE('2024-11-15', 'YYYY-MM-DD'));
 
 insert into Pet6 values (1, TO_DATE ('2022-01-15', 'YYYY-MM-DD')); 
 insert into Pet6 values	(2, TO_DATE ('2020-02-05', 'YYYY-MM-DD'));
@@ -409,6 +416,8 @@ insert into Pet6 values	(8, TO_DATE ('2022-12-10', 'YYYY-MM-DD'));
 insert into Pet6 values	(9, TO_DATE ('2023-01-01', 'YYYY-MM-DD')); 
 insert into Pet6 values	(10, TO_DATE ('2023-02-15', 'YYYY-MM-DD')); 
 insert into Pet6 values	(11, TO_DATE ('2023-03-10', 'YYYY-MM-DD'));
+insert into Pet6 values (12, TO_DATE('2022-06-06', 'YYYY-MM-DD'));
+insert into Pet6 values (13, TO_DATE('2021-12-15', 'YYYY-MM-DD'));
 
 insert into Pet7 values (1, 'Turtle');
 insert into Pet7 values	(2, 'Dog');
@@ -421,6 +430,20 @@ insert into Pet7 values	(8, 'Dog');
 insert into Pet7 values	(9, 'Cat');
 insert into Pet7 values	(10, 'Cat');
 insert into Pet7 values	(11, 'Cat');
+insert into Pet7 values	(12, 'Cat');
+insert into Pet7 values	(13, 'Dog');
+
+insert into Pet8 values ('Turtle', 'Snapping Turtle', 40);
+insert into Pet8 values	('Dog', 'Bulldog', 8);
+insert into Pet8 values	('Dog', 'Husky', 12);
+insert into Pet8 values	('Cat', 'Siamese', 15);
+insert into Pet8 values	('Cat', 'Sphynx', 15);
+insert into Pet8 values	('Dog', 'Beagle', 10);
+insert into Pet8 values	('Dog', 'Poodle', 10);
+insert into Pet8 values	('Dog', 'Golden Retriever', 12);
+insert into Pet8 values	('Cat', 'Bengal', 10); 
+insert into Pet8 values	('Cat', 'Tabby', 8);
+insert into Pet8 values	('Cat', 'Persian', 10);
 
 insert into Pet9 values (1, 'Snapping Turtle');
 insert into Pet9 values	(2, 'Bulldog');
@@ -433,6 +456,8 @@ insert into Pet9 values	(8, 'Golden Retriever');
 insert into Pet9 values	(9, 'Bengal'); 
 insert into Pet9 values	(10, 'Tabby'); 
 insert into Pet9 values	(11, 'Persian');
+insert into Pet9 values	(12, 'Persian');
+insert into Pet9 values	(13, 'Bulldog');
 
 insert into Pet10 values (1, NULL);
 insert into Pet10 values (2, '1234 Main St');
@@ -445,30 +470,21 @@ insert into Pet10 values (8, NULL);
 insert into Pet10 values (9, NULL);
 insert into Pet10 values (10, '2198 Dunbar St');
 insert into Pet10 values (11, NULL);
+insert into Pet10 values (12, NULL);
+insert into Pet10 values (13, '5678 Fraser St');
 
-insert into Pet8 values ('Turtle', 'Snapping Turtle', 40);
-insert into Pet8 values	('Dog', 'Bulldog', 8);
-insert into Pet8 values	('Dog', 'Husky', 12);
-insert into Pet8 values	('Cat', 'Siamese', 15);
-insert into Pet8 values	('Cat', 'Sphynx', 15);
-insert into Pet8 values	('Dog', 'Beagle', 10);
-insert into Pet8 values	('Dog', 'Poodle', 5);
-insert into Pet8 values	('Dog', 'Golden Retriever', 12);
-insert into Pet8 values	('Cat', 'Bengal', 10); 
-insert into Pet8 values	('Cat', 'Tabby', 8);
-insert into Pet8 values	('Cat', 'Persian', 10);
-
-insert into Pet11 values ('Snapping Turtle', 'Calcium', 'Healthy', 'Regular Check-up');
-insert into Pet11 values ('Bulldog', 'Protein', 'Diabetes', 'Daily Walks');
-insert into Pet11 values ('Husky', 'Fat', 'Healthy', 'Exercise Once a Week');
-insert into Pet11 values ('Siamese', 'Taurine', 'Vision Impairment', 'Stay Indoors');
-insert into Pet11 values ('Sphynx', 'Taurine', 'Arthritis', 'Let Roam');
-insert into Pet11 values ('Beagle', 'Fat', 'Healthy', 'Daily Walks');
-insert into Pet11 values ('Poodle', 'Protein', 'Healthy', 'Regular Check-up');
-insert into Pet11 values ('Golden Retriever', 'Fiber', 'Healthy', 'Play Daily');
-insert into Pet11 values ('Bengal', 'Fat', 'Healthy', 'Groom Regularly');
-insert into Pet11 values ('Tabby', 'Protein', 'Healthy', 'Feed Twice a Day');
-insert into Pet11 values ('Persian', 'Calcium', 'Healthy', 'Brush Regularly');
+insert into Pet11 values ('Turtle', 'Calcium', 'Healthy', 'Regular Check-up');
+insert into Pet11 values ('Dog', 'Protein', 'Diabetes', 'Daily Walks');
+insert into Pet11 values ('Dog', 'Fat', 'Healthy', 'Exercise Once a Week');
+insert into Pet11 values ('Cat', 'Taurine', 'Vision Impairment', 'Stay Indoors');
+insert into Pet11 values ('Cat', 'Taurine', 'Arthritis', 'Let Roam');
+insert into Pet11 values ('Dog', 'Protein', 'Healthy', 'Regular Check-up');
+insert into Pet11 values ('Dog', 'Fiber', 'Healthy', 'Play Daily');
+insert into Pet11 values ('Cat', 'Protein', 'Healthy', 'Groom Regularly');
+insert into Pet11 values ('Cat', 'Calcium', 'Healthy', 'Feed Twice a Day');
+insert into Pet11 values ('Cat', 'Fiber', 'Healthy', 'Brush Regularly');
+insert into Pet11 values ('Cat', 'Taurine', 'Allergies', 'Special Diet');
+insert into Pet11 values ('Dog', 'Protein', 'Allergies', 'Regular Check-up');
 
 insert into Documentation values (1, '111-111-1323', 345, 'Vaccination Records', TO_DATE ('2004-01-04', 'YYYY-MM-DD'));
 insert into Documentation values (2, '234-245-2311', 89, 'Allergies', TO_DATE ('2001-12-04', 'YYYY-MM-DD'));
@@ -487,6 +503,7 @@ insert into Dog	values (3, 'Long', 10);
 insert into Dog	values (6, 'Short-Coated', 5); 
 insert into Dog	values (7, 'Curly-Coated', 6);
 insert into Dog	values (8, 'Fluffy', 8);
+insert into Dog	values (13, 'Medium-Coated', 7);
 
 insert into Cat	values (4, 'Bristly', 20);
 insert into Cat	values (5, 'Hairless', 18);
@@ -494,12 +511,27 @@ insert into Cat	values (9, 'Short-Haired', 10);
 insert into Cat	values (10, 'Long-Haired', 12);
 insert into Cat	values (11, 'Fluffy', 14);
 
-insert into PurchasesFrom values ('13 Watford St', '100 Fraser St'); 
 insert into PurchasesFrom values ('164 Alma St', '54 Robson St');
+insert into PurchasesFrom values ('164 Alma St', '16 Main St');
+insert into PurchasesFrom values ('164 Alma St', '999 All St'); 
 insert into PurchasesFrom values ('99 Jump St', '74 Granville St');
-insert into PurchasesFrom values ('1443 Commercial St', '76 Nanaimo St'); 
+insert into PurchasesFrom values ('99 Jump St', '16 Main St');
+insert into PurchasesFrom values ('99 Jump St', '999 All St'); 
+insert into PurchasesFrom values ('1443 Commercial St', '76 Nanaimo St');
+insert into PurchasesFrom values ('1443 Commercial St', '16 Main St'); 
+insert into PurchasesFrom values ('1443 Commercial St', '999 All St'); 
 insert into PurchasesFrom values ('1212 Orlando St', '16 Main St');
 insert into PurchasesFrom values ('1212 Orlando St', '100 Fraser St');
+insert into PurchasesFrom values ('1212 Orlando St', '999 All St');
+insert into PurchasesFrom values ('13 Watford St', '100 Fraser St'); 
+insert into PurchasesFrom values ('13 Watford St', '999 All St'); 
+insert into PurchasesFrom values ('13 Watford St', '54 Robson St'); 
+insert into PurchasesFrom values ('13 Watford St', '74 Granville St');
+insert into PurchasesFrom values ('13 Watford St', '76 Nanaimo St'); 
+insert into PurchasesFrom values ('13 Watford St', '16 Main St'); 
+insert into PurchasesFrom values ('164 Alma St', '100 Fraser St'); 
+insert into PurchasesFrom values ('164 Alma St', '74 Granville St');
+insert into PurchasesFrom values ('164 Alma St', '76 Nanaimo St'); 
 
 insert into Trains values ('778-111-1111', 1);
 insert into Trains values ('778-111-1112', 2);
@@ -520,7 +552,6 @@ insert into VetWorksWithShel values	('234-245-2311', '54 Robson St');
 insert into VetWorksWithShel values	('604-323-1212', '74 Granville St');
 insert into VetWorksWithShel values	('999-233-3232', '76 Nanaimo St');
 insert into VetWorksWithShel values	('456-234-1242', '16 Main St'); 
-
 
 insert into TrainWorksWithShel values ('778-111-1111', '100 Fraser St');
 insert into TrainWorksWithShel values ('778-111-1112', '54 Robson St');
