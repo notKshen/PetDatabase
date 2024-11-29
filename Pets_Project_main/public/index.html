@@ -15,6 +15,19 @@
 
     <hr style="border: 4px solid black;"> <!-- ========================================================================= -->
 
+           
+    <h2>Show VeterinarianTable</h2>
+    <table id="vetTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Experience</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
     
     <!-- Show 'DocumentationTable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
@@ -574,8 +587,9 @@
         <br>
         <button id="shelterAddSelectionClause">Add Selection Clause</button>
     </div>
+    <div>*The AND/OR operator in the first clause will be automatically ignored</div>
     </div>
-    <br><br>
+    <br>
     <button id="shelterResetAllClauses">Reset All Clauses</button>
     <button id="selectShelter"> select </button>
 
@@ -598,20 +612,7 @@
     </table>
     <br><hr style="border: 4px solid black;"><br> <!-- ========================================================================= -->
 
-        
-    <h2>Show VeterinarianTable</h2>
-    <table id="vetTable" border="1 px">
-        <thead>
-            <tr>
-                <th>Address</th>
-                <th>Contact</th>
-                <th>Experience</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    
+ 
 
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>

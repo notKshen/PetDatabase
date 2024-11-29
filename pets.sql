@@ -236,7 +236,7 @@ create table Trains (
 	trainerContact		varchar (12),
 	pid					integer,
 	primary key (trainerContact, pid),
-	foreign key (TrainerContact) references Trainer1,
+	foreign key (TrainerContact) references Trainer1 ON DELETE CASCADE,
 	foreign key (pid) references Pet1
 );
 grant select on Trains to public;
