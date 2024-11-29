@@ -263,7 +263,7 @@ create table TrainWorksWithShel (
 	trainerContact		varchar (12), 
 	shelterAddress		varchar (50),
 	primary key (trainerContact, shelterAddress),
-	foreign key (trainerContact) references Trainer1,
+	foreign key (trainerContact) references Trainer1 ON DELETE CASCADE,
 	foreign key (shelterAddress) references Shelter
 );
 grant select on TrainWorksWithShel to public;
