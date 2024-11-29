@@ -502,7 +502,7 @@ insert into Dog	values (3, 'Long', 10);
 insert into Dog	values (6, 'Short-Coated', 5); 
 insert into Dog	values (7, 'Curly-Coated', 6);
 insert into Dog	values (8, 'Fluffy', 8);
-insert into Dog	values (12, 'Medium-Coated', 7);
+insert into Dog	values (13, 'Medium-Coated', 7);
 
 insert into Cat	values (4, 'Bristly', 20);
 insert into Cat	values (5, 'Hairless', 18);
