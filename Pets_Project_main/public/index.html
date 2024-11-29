@@ -13,7 +13,42 @@
 <body>
     <h1>Pet Shelter Database:  </h1>
 
-    <br><hr><br> <!-- ========================================================================= -->
+    <hr style="border: 4px solid black;"> <!-- ========================================================================= -->
+
+    
+    <!-- Show 'DocumentationTable'. 
+        Data will be fetched and inserted here dynamically using JavaScript. -->
+        <h2>Show DocumentationTable</h2>
+        <table id="docTable" border="1 px">
+            <thead>
+                <tr>
+                    <th>Pets Id</th>
+                    <th>Veterinarian Contact</th>
+                    <th>Id</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    
+        <br><hr><br> <!-- ========================================================================= -->
+    
+        <h2> 2.1.1 Insert Values into DocumentationTable </h2>
+        <p style="color: red; font-weight: bold;">Make sure Pet ID and Vet Contact already exist.</p>
+        <form id="insertDocTable">
+            Pets ID: <input type="number" id="insertPID" placeholder="Enter Pet ID" required> <br><br>
+            Veterinarian Contact: <input type="text" id="insertVetCon" placeholder="Enter vet phone number (e.g. XXX-XXX-XXXX)" maxlength="12" required> <br><br>
+            ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
+            Description: <input type="text" id="insertDesc" placeholder="Enter document description"> <br><br>
+            Date: <input type="date" id="insertDate" placeholder="Enter document date"> <br><br>
+    
+            <button type="submit"> insert </button> <br>
+        </form>
+        <div id="insertResultMsg"></div><br>
+    
+        <hr style="border: 4px solid black;"> <!-- ========================================================================= -->
 
     <!-- Show 'PetTable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
@@ -39,24 +74,10 @@
         </tbody>
     </table> 
 
-    <button onclick="sortYoung()" class="sortButton">Sort Young Pets</button>
-    <table id="youngTable" class ="hidden" border="1 px">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Age</th>
-                <th>Species</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-  
-    <div id="updateMsg"></div>
-
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2>Update Information</h2>
+    <h2>2.1.2 Update - Update Information on Pets</h2>
+    <p style="font-weight: bold;"> *Owner Address is a foreign key to Owner Table.</p>
     <form id="updatePetTable">
     <label for="updateSelect">What would you like to update?</label>
     <select id="updateSelect" class="form-select" onchange="showUpdateFields()">
@@ -115,20 +136,38 @@
     <button type="submit">Update</button>
     </form>
     <div id="updateResultMsg"></div>
+
     <br><hr><br> <!-- ========================================================================= -->
 
-
-    <!-- Show 'DocumentationTable'. 
-        Data will be fetched and inserted here dynamically using JavaScript. -->
-    <h2>Show DocumentationTable</h2>
-    <table id="docTable" border="1 px">
+    <h2>2.1.7 Aggregation with GROUP BY - Find average age of each pet species</h2>
+    <label for="avgAgeGroupBySpecies">Calculate the average age for each pet species:</label>
+    <button id="avgAgeGroupBySpecies"> execute query </button>
+    <!-- A placeholder to display the count result. -->
+    <div id="aggregationWgroupByResultMsg"></div>
+    <br>
+    <table id="speciesAvgAgeTable" border="1 px">
         <thead>
             <tr>
-                <th>Pets Id</th>
-                <th>Veterinarian Contact</th>
-                <th>Id</th>
-                <th>Description</th>
-                <th>Date</th>
+                <th>Pet Species</th>
+                <th>Average Age</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    
+
+    <h2> 2.1.8 Aggregation with HAVING - For all pets, find the average ages of pet breeds greater than 5</h2>
+
+    <button type="button" onclick="havingQuery()">Show</button> <br> <br>
+    <div id="havingResultMsg"></div>
+    <table id="havingTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Pet Species</th>
+                <th>Average Age</th>
             </tr>
         </thead>
         <tbody>
@@ -137,88 +176,195 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
-    <h2> 2.1.1 Insert Values into DocumentationTable (make sure Pet ID and Vet Contact already exist)</h2>
-    <form id="insertDocTable">
-        Pets ID: <input type="number" id="insertPID" placeholder="Enter Pet ID" required> <br><br>
-        Veterinarian Contact: <input type="text" id="insertVetCon" placeholder="Enter vet phone number (e.g. XXX-XXX-XXXX)" maxlength="12" required> <br><br>
-        ID: <input type="number" id="insertId" placeholder="Enter ID" required> <br><br>
-        Description: <input type="text" id="insertDesc" placeholder="Enter document description"> <br><br>
-        Date: <input type="date" id="insertDate" placeholder="Enter document date"> <br><br>
-
-        <button type="submit"> insert </button> <br>
-    </form>
-    <div id="insertResultMsg"></div>
-
-    <br><hr><br> <!-- ========================================================================= -->
-
-    <h2>Show VeterinarianTable</h2>
-    <table id="vetTable" border="1 px">
+    <h2>2.1.9 Nested Aggregation with GROUP BY - Find animals whose age <= average age of its species </h2>
+    <button onclick="sortYoung()" class="sortButton">Sort Young Pets</button>
+    <table id="youngTable" class ="hidden" border="1 px">
         <thead>
             <tr>
-                <th>Address</th>
-                <th>Contact</th>
-                <th>Experience</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
-    <h2>Show OwnerTable</h2>
-    <table id="ownerTable" border="1 px">
-        <thead>
-            <tr>
-                <th>Address</th>
-                <th>Name</th>
-                <th>Contact</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
-    <h2>Show AdoptionApplicationTable</h2>
-    <table id="applicationTable" border="1 px">
-        <thead>
-            <tr>
-                <th>Shelter Address</th>
-                <th>Owner Address</th>
                 <th>ID</th>
-                <th>Date</th>
-                <th>Approval Status</th>
+                <th>Age</th>
+                <th>Species</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
+  
+    <div id="updateMsg"></div>
 
-    <h2>Show ShelterTable</h2>
-    <table id="shelterTable" border="1 px">
+    <br><hr><br> <!-- ========================================================================= -->
+    <h2>Additional Selection/Join - Selection On PetTable</h2>
+    <table id="selectedPetTable" border="1 px">
         <thead>
             <tr>
-                <th>Address</th>
-                <th>Capacity</th>
-                <th>Contact</th>
+                <th>Pet ID</th>
+                <th>Pet Name</th>
+                <th>Species</th>
+                <th>Age</th>
+                <th>Dietary Requirements</th>
+                <th>Health Condition</th>
+                <th>Adoption Date</th>
+                <th>Arrival Date</th>
+                <th>Breed</th>
+                <th>Owner Address</th>
+                <th>Care Plan</th>
+                <th>Lifespan</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
+    <br>
 
-    <h2>Show PurchasesFromTable</h2>
-    <table id="purchasesFromTable" border="1 px">
+    <b>Filtering Conditions:</b>
+    <p id="selectionText"></p>
+    <b>SQL:</b>
+    <p id="selectionSQL" style="color: blue;"></p>
+
+    <div id="addSelectionClauseDiv">
+        <span>
+            <select name="AndOrSelect" id="AndOrSelect">
+                <option value="AND"> AND </option>
+                <option value="OR"> OR </option>
+            </select>
+            <span style="margin-right: 60px; margin-left: 60px;">
+                <input type="checkbox" id="leftParenthesis" value="("> (
+            </span>
+            <select id="attributeSelect">
+                <option value="Pet1.pid">Pet ID</option>
+                <option value="Pet1.pname">Pet Name</option>
+                <option value="Pet2.species">Species</option>
+                <option value="Pet2.age">Age</option>
+                <option value="Pet2.dietaryRequirements">Dietary Requirements</option>
+                <option value="Pet4.healthCondition">Health Condition</option>
+                <option value="Pet5.adoptionDate">Adoption Date</option>
+                <option value="Pet6.arriveDate">Arrival Date</option>
+                <option value="Pet8.breed">Breed</option>
+                <option value="Pet10.ownerAddress">Owner Address</option>
+                <option value="Pet11.carePlan">Care Plan</option>
+                <option value="Pet8.lifespan">Lifespan</option>
+            </select>
+        </span>
+
+        <span class="selectionConditions" id="varcharSelection">
+            <select id="varcharOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value="LIKE">LIKE</option>
+                <option value="NOT LIKE">NOT LIKE</option>
+            </select>
+            <input type="text" id="varcharInput">
+        </span>
+
+        <span class="selectionConditions" id="intSelection">
+            <select id="intOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value=">">&gt;</option>
+                <option value="<">&lt;</option>
+                <option value=">=">&ge;</option>
+                <option value="<=">&le;</option>
+            </select>
+            <input type="number" min="0" value="1" id="intInput">
+        </span>
+
+        <span class="selectionConditions" id="adoptionDateSelection">
+            <input type="radio" name="adoptionDateRadio" id="adoptionDateNull" checked>
+            <label for="adoptionDateNull">= null (i.e. not yet adopted)</label>
+
+            <input type="radio" name="adoptionDateRadio" id="adoptionDateNotNull">
+            <label for="adoptionDateNotNull">not null (adopted)</label>
+
+            <input type="radio" name="adoptionDateRadio" id="adoptionDateValues">
+            <label for="adoptionDateValues"></label>
+
+            <select id="adoptionDateOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value=">">&gt;</option>
+                <option value="<">&lt;</option>
+                <option value=">=">&ge;</option>
+                <option value="<=">&le;</option>
+            </select>
+            <input type="date" id="adoptionDateInput" value="2024-01-01">
+        </span>
+
+        <span class="selectionConditions" id="arriveDateSelection">
+            <select id="arriveDateOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value=">">&gt;</option>
+                <option value="<">&lt;</option>
+                <option value=">=">&ge;</option>
+                <option value="<=">&le;</option>
+            </select>
+            <input type="date" id="arriveDateInput" value="2024-01-01">
+        </span>
+
+        <span class="selectionConditions" id="speciesSelection">
+            <select id="speciesOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value="LIKE">LIKE</option>
+                <option value="NOT LIKE">NOT LIKE</option>
+            </select>
+            <input type="radio" name="speciesRadio" id="speciesSelectRadio" checked> <select
+                id="speciesSelect"></select>
+            <input type="radio" name="speciesRadio" id="speciesInputRadio"><input type="text" id="speciesInput">
+        </span>
+
+        <span style="margin-right: 60px; margin-left: 60px;">
+            <input type="checkbox" id="rightParenthesis" value=")"> )
+        </span>
+        <br>
+        <button id="addSelectionClause">Add Selection Clause</button>
+    </div>
+
+    <br><br>
+    <button id="resetAllClauses">Reset All Clauses</button>
+    <button id="selectPet"> select </button>
+
+    <div id="SelectionResultMsg"></div>
+
+    <p><b>Reminders on entering values:</b></p>
+    <ul>
+        <li>The AND/OR operator in the first clause will be automatically ignored, since not applicable.</li>
+        <li>Do not include the quotation marks when entering varchar values.</li>
+        <li>For the LIKE operator, % represents any number of characters, and _ represents a single character. For
+            example, %a% means the value contains the letter "a" at any position.</li>
+        <li>If no filtering conditions are provided, all pets will be selected by default.</li>
+        <li>Users do not need to know the exact SQL syntax, but the input must be logically correct for the query to
+            work.</li>
+    </ul>
+    <br>
+
+    <br><hr style="border: 4px solid black;"><br> <!-- ========================================================================= -->
+
+    <h2>2.1.3 Delete - Delete Tuple from TrainerTable</h2>
+    <table id="trainerTable" border="1 px">
         <thead>
             <tr>
-                <th>Supplier Address</th>
-                <th>Shelter Address</th>
+                <th>Trainer Contact</th>
+                <th>Trainer Name</th>
+                <th>Certification</th>
+                <th>Specialty</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
+    <br>
+    <label for="trainerContactSelect">Select Contact of the Trainer you want to delete:</label>
+    <select name="trainerContactSelect" id="trainerContactSelect"></select>
+    <br><br>
+    <button id="deleteTrainer"> delete </button>
+    <!-- A placeholder to display the deletion result. -->
+    <div id="deleteTrainerMsg"></div>
 
-
-    <h2>Show DogTable</h2>
+    <br><hr style="border: 4px solid black;"><br> <!-- ========================================================================= -->
+    
+    <h2>2.1.5 Projection - view any number of attributes from Dog</h2>
+    <h3>Show DogTable</h3>
     <div class="filter-icon-container">
         <span class="filter-icon" onclick="toggleFilter()">&#9776;</span>
     </div>
@@ -251,6 +397,42 @@
         </tbody>
     </table> 
 
+
+    <br><hr style="border: 4px solid black;"><br> <!-- ========================================================================= -->
+    
+
+
+
+    <h2>Show OwnerTable</h2>
+    <table id="ownerTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Name</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    
+    <h2>Show AdoptionApplicationTable</h2>
+    <table id="applicationTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Shelter Address</th>
+                <th>Owner Address</th>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Approval Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2> 2.1.6 Join Values on PetOwnerTable and AdoptionApplicationTable</h2>
@@ -305,25 +487,101 @@
         <tbody>
         </tbody>
     </table>
+    <br><hr style="border: 4px solid black;"><br> <!-- ========================================================================= -->
 
-    <br><hr><br>
-
-    <h2> 2.1.8 Aggregation with HAVING - For all pets, find the average ages of pet breeds greater than 5</h2>
-
-    <button type="button" onclick="havingQuery()">Show</button> <br> <br>
-    <div id="havingResultMsg"></div>
-    <table id="havingTable" border="1 px">
+    <h2>Show ShelterTable</h2>
+    <table id="shelterTable" border="1 px">
         <thead>
             <tr>
-                <th>Pet Species</th>
-                <th>Average Age</th>
+                <th>Address</th>
+                <th>Capacity</th>
+                <th>Contact</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
 
-    <br><hr><br>
+    <h2>Show PurchasesFromTable</h2>
+    <table id="purchasesFromTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Supplier Address</th>
+                <th>Shelter Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <br><hr><br> <!-- ========================================================================= -->
+    
+    <h2>2.1.4 Selection On ShelterTable</h2>
+    <table id="selectedShelterTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Shelter Address</th>
+                <th>Capacity</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <b>Filtering Conditions:</b>
+    <p id="shelterSelectionSQL" style="color: blue;"></p>
+
+    <div id="shelterAddSelectionClauseDiv">
+        <span>
+            <select name="shelterAndOrSelect" id="shelterAndOrSelect">
+                <option value="AND"> AND </option>
+                <option value="OR"> OR </option>
+            </select>
+            <span style="margin-right: 60px; margin-left: 60px;">
+                <input type="checkbox" id="shelterLeftParenthesis" value="("> (
+            </span>
+            <select id="shelterAttributeSelect">
+                <option value="saddress">address</option>
+                <option value="capacity">capacity</option>
+                <option value="contact">contact</option>
+            </select>
+        </span>
+        <span class="shelterSelectionConditions" id="shelterVarcharSelection">
+            <select id="shelterVarcharOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value="LIKE">LIKE</option>
+                <option value="NOT LIKE">NOT LIKE</option>
+            </select>
+            <input type="text" id="shelterVarcharInput">
+        </span>
+        <span class="shelterSelectionConditions" id="shelterIntSelection">
+            <select id="shelterIntOperator">
+                <option value="=">=</option>
+                <option value="!=">!=</option>
+                <option value=">">&gt;</option>
+                <option value="<">&lt;</option>
+                <option value=">=">&ge;</option>
+                <option value="<=">&le;</option>
+            </select>
+            <input type="number" min="0" value="1" id="shelterIntInput">
+        </span>
+
+        <span style="margin-right: 60px; margin-left: 60px;">
+            <input type="checkbox" id="shelterRightParenthesis" value=")"> )
+        </span>
+        <br>
+        <button id="shelterAddSelectionClause">Add Selection Clause</button>
+    </div>
+    </div>
+    <br><br>
+    <button id="shelterResetAllClauses">Reset All Clauses</button>
+    <button id="selectShelter"> select </button>
+
+    <div id="ShelterSelectionResultMsg"></div>
+
+    <br><hr><br> <!-- ========================================================================= -->
 
     <h2> 2.1.10 Division - Find the Shelters that have Purchases from every supplier</h2>
 
@@ -338,6 +596,23 @@
         <tbody>
         </tbody>
     </table>
+    <br><hr style="border: 4px solid black;"><br> <!-- ========================================================================= -->
+
+        
+    <h2>Show VeterinarianTable</h2>
+    <table id="vetTable" border="1 px">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>Experience</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
+
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="scripts.js"></script>
 </body>

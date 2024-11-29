@@ -2,7 +2,7 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   padding: 40px;
-  max-width: 800px;
+  max-width:55%;
   margin: auto;
   line-height: 1.6;
   background-color: #fffef5f9;
@@ -179,4 +179,89 @@ input::placeholder, textarea::placeholder {
 
 .filter-icon:hover {
   color: #218838;
+}
+
+#leftParenthesis, #rightParenthesis {
+    width: auto; 
+}
+
+#speciesSelectRadio, #speciesInputRadio, #adoptionDateNull, #adoptionDateNotNull, #adoptionDateValues {
+    width: auto;
+}
+
+#adoptionDateInput, #arriveDateInput, #speciesInput, #varcharInput, #intInput {
+    width: 120px;
+}
+
+#AndOrSelect {
+    padding: 8px 12px;
+    font-size: 16px; 
+}
+
+#attributeSelect, #varcharOperator, #intOperator, #adoptionDateOperator, #arriveDateOperator, #speciesOperator,#speciesSelect {
+    padding: 8px 12px;
+    margin: 5px 10px;
+    font-size: 16px;
+}
+
+#addSelectionClauseDiv {
+    display: inline-block;
+    padding: 20px; 
+    background-color: #fafafa;
+    border: 1px solid #afafaf;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.1);
+    font-size: 16px; 
+    border-radius: 7px;
+}
+#addSelectionClause {
+    display: block;
+    margin: 0 auto;
+}
+
+#adoptionDateNull, #adoptionDateNotNull, #adoptionDateValues {
+    margin-left: 20px; 
+}
+
+
+/* shelter: */
+#shelterLeftParenthesis, #shelterRightParenthesis {
+    width: auto; 
+}
+
+#shelterSpeciesSelectRadio, #shelterSpeciesInputRadio, #shelterAdoptionDateNull, #shelterAdoptionDateNotNull, #shelterAdoptionDateValues {
+    width: auto;
+}
+
+#shelterAdoptionDateInput, #shelterArriveDateInput, #shelterSpeciesInput, #shelterVarcharInput, #shelterIntInput {
+    width: 120px;
+}
+
+#shelterAndOrSelect {
+    padding: 8px 12px;
+    font-size: 16px; 
+}
+
+#shelterAttributeSelect, #shelterVarcharOperator, #shelterIntOperator, #shelterAdoptionDateOperator, #shelterArriveDateOperator, #shelterSpeciesOperator, #shelterSpeciesSelect {
+    padding: 8px 12px;
+    margin: 5px 10px;
+    font-size: 16px;
+}
+
+#shelterAddSelectionClauseDiv {
+    display: inline-block;
+    padding: 20px; 
+    background-color: #fafafa;
+    border: 1px solid #afafaf;
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.1);
+    font-size: 16px; 
+    border-radius: 7px;
+}
+
+#shelterAddSelectionClause {
+    display: block;
+    margin: 0 auto;
+}
+
+#shelterAdoptionDateNull, #shelterAdoptionDateNotNull, #shelterAdoptionDateValues {
+    margin-left: 20px; 
 }
