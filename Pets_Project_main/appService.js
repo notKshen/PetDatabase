@@ -289,6 +289,11 @@ async function updateDemotable(field, oldValue, newValue, petID) {
                   FROM Pet3
                   WHERE pid = :petID
               )
+              AND species = (
+                  SELECT species
+                  FROM Pet7
+                  WHERE pid = :petID
+              )
               `,
               [Number(newValue), Number(oldValue), petID],
               { autoCommit: true }
@@ -303,25 +308,31 @@ async function updateDemotable(field, oldValue, newValue, petID) {
             );
             break;
         
-        
-        case "healthCondition":
-            if(oldValue == '' || newValue == '') return false;
-          result = await connection.execute(
-            `UPDATE Pet4 SET healthCondition = :newValue WHERE healthCondition = :oldValue AND pid = :petID`,
-            [newValue, oldValue, petID],
-            { autoCommit: true }
-          );
+            case "healthCondition":
+                // Ensure both oldValue and newValue are not empty
+                if (oldValue == '' || newValue == '') return false;
+            
+                result = await connection.execute(
+                    `
+                    UPDATE Pet11
+                    SET healthCondition = :newValue
+                    WHERE healthCondition = :oldValue
+                    AND EXISTS (
+                        SELECT 1
+                        FROM PetDetailsView dv
+                        WHERE dv.pid = :petID
+                        AND dv.species = Pet11.species
+                        AND dv.dietaryRequirements = Pet11.dietaryRequirements
+                    )
+                    `,
+                    [newValue, oldValue, petID],
+                    { autoCommit: true }
+                );
+            
 
           await connection.execute(
             `
-            UPDATE Pet11
-            SET healthCondition = :newValue
-            WHERE healthCondition = :oldValue
-                AND species = (
-                SELECT species
-                FROM Pet7
-                WHERE pid = :petID
-            )
+            UPDATE Pet4 SET healthCondition = :newValue WHERE healthCondition = :oldValue AND pid = :petID
             `,
             [newValue, oldValue, petID],
         { autoCommit: true }
