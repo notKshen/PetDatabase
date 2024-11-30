@@ -565,7 +565,7 @@ function showUpdateFields() {
         document.getElementById("adoptionDateDiv").classList.remove("hidden");
     } else if (selectValue === "ownerAddress") {
         document.getElementById("ownerAddressDiv").classList.remove("hidden");
-    }
+    } 
 }
 
 // Update demotable

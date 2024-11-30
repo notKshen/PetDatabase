@@ -566,4 +566,35 @@ insert into Hosts values (4, '76 Nanaimo St');
 insert into Hosts values (5, '16 Main St');
 insert into Hosts values (5, '100 Fraser St');
 
+CREATE OR REPLACE VIEW PetDetailsView AS
+SELECT 
+    Pet1.pid,
+    Pet1.pname,
+    Pet2.species,
+    Pet2.age,
+    Pet2.dietaryRequirements,
+    Pet4.healthCondition,
+    Pet5.adoptionDate,
+    Pet6.arriveDate,
+    Pet8.breed,
+    Pet10.ownerAddress,
+    Pet11.carePlan,
+    Pet8.lifespan
+FROM 
+    Pet1
+    JOIN Pet3 ON Pet1.pid = Pet3.pid
+    JOIN Pet4 ON Pet1.pid = Pet4.pid
+    JOIN Pet5 ON Pet1.pid = Pet5.pid
+    JOIN Pet6 ON Pet1.pid = Pet6.pid
+    JOIN Pet7 ON Pet1.pid = Pet7.pid
+    JOIN Pet9 ON Pet1.pid = Pet9.pid
+    JOIN Pet10 ON Pet1.pid = Pet10.pid
+    JOIN Pet2 ON Pet2.species = Pet7.species AND Pet2.age = Pet3.age
+    JOIN Pet8 ON Pet8.species = Pet7.species AND Pet8.breed = Pet9.breed
+    JOIN Pet11 ON Pet11.dietaryRequirements = Pet2.dietaryRequirements 
+               AND Pet11.healthCondition = Pet4.healthCondition
+               AND Pet11.species = Pet7.species;
+grant select on PetDetailsView to public;
+grant update on PetDetailsView to public;
+
 commit;
