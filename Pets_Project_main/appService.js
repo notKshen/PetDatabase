@@ -280,20 +280,18 @@ async function updateDemotable(field, oldValue, newValue, petID) {
           case "age":
             if(oldValue == '' || newValue == '') return false;
             result = await connection.execute(
-              `
-              UPDATE Pet2
-              SET age = :newValue
-              WHERE age = :oldValue 
-              AND age = (
-                  SELECT age
-                  FROM Pet3
-                  WHERE pid = :petID
-              )
-              AND species = (
-                  SELECT species
-                  FROM Pet7
-                  WHERE pid = :petID
-              )
+            `
+            UPDATE Pet2
+            SET age = :newValue
+            WHERE age = :oldValue
+            AND EXISTS (
+                SELECT 1
+                FROM PetDetailsView dv
+                WHERE dv.pid = :petID
+                AND dv.species = Pet2.species
+                AND dv.age = Pet2.age
+            )
+
               `,
               [Number(newValue), Number(oldValue), petID],
               { autoCommit: true }
